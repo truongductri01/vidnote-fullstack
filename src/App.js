@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import VideoSearch from "./components/VideoSearch/VideoSearch";
 
 function App() {
+  const [selectedVideo, setSelectedVideo] = useState();
+  console.log("Selected Video >>>", selectedVideo);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav>
+        <h1>VidNote</h1>
+        <p>Never forget your videos</p>
+      </nav>
+      {selectedVideo ? (
+        <p>Has selected video</p>
+      ) : (
+        <VideoSearch setSelectedVideo={setSelectedVideo} />
+      )}
     </div>
   );
 }
