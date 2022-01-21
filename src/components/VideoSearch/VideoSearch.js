@@ -4,7 +4,7 @@ import {
   YOUTUBE_API_KEY,
 } from "../../helpers/constants";
 import { fetchYoutube } from "../../helpers/utils";
-import VideoSearchCar from "../VideoSearchCar/VideoSearchCar";
+import VideoSearchCard from "../VideoSearchCard/VideoSearchCard";
 
 const VideoSearch = (props) => {
   const [videos, setVideos] = useState();
@@ -17,8 +17,6 @@ const VideoSearch = (props) => {
       }
     );
   };
-
-  videos && console.log(videos);
 
   return (
     <div className="VideoSearch">
@@ -48,7 +46,7 @@ const VideoSearch = (props) => {
       {videos && (
         <div className="VideoSearchContainer">
           {videos.map((vid) => (
-            <VideoSearchCar video={vid} key={vid.id.videoId} {...props} />
+            <VideoSearchCard video={vid} key={vid.id.videoId} {...props} />
           ))}
         </div>
       )}

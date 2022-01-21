@@ -1,0 +1,12 @@
+div.DraftEditor-root {
+  box-sizing: border-box;
+  border: 1px solid #000;
+  background-color: beige;
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+  height: 100%;
+}

@@ -16,16 +16,16 @@ async function isAuthenticatedByNumber(userNumberId, database = db) {
   return docSnapshot.docs.some((doc) => doc.id === userNumberId);
 }
 
-async function setNoteByVidId(note, vidData, database = db) {
-  await setDoc(doc(database, "notes", vidData.id.videoId), {
+async function setNoteByVidId(note, data, database = db) {
+  await setDoc(doc(database, "notes", `${data.id}`), {
+    ...data,
     note,
-    videoId: vidData.id.videoId,
   });
-  return vidData.id.videoId;
+  return data.id;
 }
 
 async function getNoteByVidId(vidId, database = db) {
-  const docRef = doc(database, "notes", vidId);
+  const docRef = doc(database, "notes", `${vidId}`);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {

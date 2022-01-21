@@ -1,14 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals.js";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SearchScreen from "./screens/SearchScreen";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import NotesScreen from "./screens/NotesScreen";
+import NoteEditScreen from "./screens/NoteEditScreen";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<SearchScreen />}></Route>
+            <Route path="notes" element={<NotesScreen />}>
+              <Route index element={<h1>NotesScreen</h1>} />
+              <Route path=":noteId" element={<NoteEditScreen />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
