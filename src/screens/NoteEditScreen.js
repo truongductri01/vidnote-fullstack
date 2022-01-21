@@ -37,6 +37,7 @@ function NoteEditScreen() {
         setData({ ...data, ...res });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!data || !data.video || !data.id) {

@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import NotesScreen from "./screens/NotesScreen";
 import NoteEditScreen from "./screens/NoteEditScreen";
+import GalleryScreen from "./screens/GalleryScreen";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.render(
               <Route path=":noteId" element={<NoteEditScreen />} />
             </Route>
           </Route>
+          <Route path="/gallery" element={<GalleryScreen />}></Route>
         </Routes>
       </BrowserRouter>
     </Provider>
