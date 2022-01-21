@@ -7,6 +7,7 @@ import { stringDelimeter } from "../helpers/constants";
 import { getNoteByVidId, setNoteByVidId } from "../firebase/firestore";
 import { setSelectedNote } from "../redux/reducers/notes/notesReducer";
 import NoteVideo from "../components/NoteVideo/NoteVideo";
+import { setLoading } from "../redux/reducers/loader/loaderReducer";
 
 function NoteEditScreen() {
   const dispatch = useDispatch();
@@ -32,11 +33,17 @@ function NoteEditScreen() {
   }, [data]);
 
   useEffect(() => {
-    getNoteByVidId(selectedNote?.id ? selectedNote.id : noteId).then((res) => {
-      if (res) {
-        setData({ ...data, ...res });
-      }
-    });
+    dispatch(setLoading(true));
+    getNoteByVidId(selectedNote?.id ? selectedNote.id : noteId)
+      .then((res) => {
+        if (res) {
+          dispatch(setLoading(false));
+          setData({ ...data, ...res });
+        }
+      })
+      .catch(() => {
+        dispatch(setLoading(true));
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,15 +66,15 @@ function NoteEditScreen() {
       <NoteVideo video={data.video} />
       <DraftEditor editorState={editorState} setEditorState={setEditorState} />
       <button
+        className="min-w-10 h-max p-2 bg-violet-800 text-gray-100 mt-2 rounded-lg"
         onClick={() => {
-          // console.log(
-          //   editorState.getCurrentContent().getPlainText(stringDelimeter)
-          // );
+          dispatch(setLoading(true));
           setNoteByVidId(
             editorState.getCurrentContent().getPlainText(stringDelimeter),
             data
           ).then(() => {
             alert("Data is saved");
+            dispatch(setLoading(false));
             dispatch(setSelectedNote(data));
           });
         }}

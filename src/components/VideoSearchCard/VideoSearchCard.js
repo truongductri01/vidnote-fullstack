@@ -7,12 +7,7 @@ function VideoSearchCard({ video }) {
   const navigate = useNavigate();
   return (
     <div
-      className="VideoSearchCar"
-      style={{
-        cursor: "pointer",
-        marginBottom: "12px",
-        backgroundColor: "lightgreen",
-      }}
+      className="VideoSearchCar w-full cursor-pointer mb-3 bg-yellow-400 rounded-lg py-2 px-3"
       onClick={() => {
         dispatch(setSelectedNote({ id: video.id.videoId, video: video }));
         navigate(`/notes/${video.id.videoId}`);
