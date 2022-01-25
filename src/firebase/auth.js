@@ -21,7 +21,7 @@ async function signIn(email, password) {
   let idToken = await signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => userCredential.user.getIdToken())
     .catch(() => null);
-  setIdTokenLocalStorage(idToken);
+  idToken && setIdTokenLocalStorage(idToken);
   return idToken;
 }
 
@@ -33,8 +33,7 @@ async function signUp(email, pasword) {
   return idToken;
 }
 
-async function getUserInfo(email, password) {
-  let idToken = await signIn(email, password);
+async function getUserInfo(idToken) {
   let userInfo = await fetch("http://localhost:8080/v1/api/auth/user-info", {
     method: "GET",
     headers: {

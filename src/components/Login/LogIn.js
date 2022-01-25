@@ -33,9 +33,11 @@ function LogIn() {
             e.preventDefault();
             dispatch(setLoading(true));
             signIn(email, password)
-              .then(() => {
+              .then((idToken) => {
                 dispatch(setLoading(false));
-                navigate("/");
+                if (idToken) {
+                  navigate("/");
+                }
               })
               .catch(() => {
                 dispatch(setLoading(false));
