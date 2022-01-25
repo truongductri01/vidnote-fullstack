@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     if (!idToken) {
-      navigate("/login");
+      navigate("/auth/login");
     }
   }, [idToken, navigate, dispatch]);
 

@@ -21,7 +21,7 @@ function NavBar() {
           logOut().then(() => {
             dispatch(setLoading(false));
             dispatch(removeUserInfo());
-            navigate("/login");
+            navigate("/auth/login");
           });
         }}
       >
