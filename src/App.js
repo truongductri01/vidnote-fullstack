@@ -1,28 +1,31 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
 import Loader from "./designComponents/Loader/Loader.js";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getIdTokenLocalStorage } from "./helpers/localStorageUtils";
+import { getUserInfo } from "./firebase/auth";
+import { setUserInfo } from "./redux/reducers/user/userReducer";
 
 function App() {
   const isLoading = useSelector((state) => state.loader.isLoading);
   const idToken = getIdTokenLocalStorage();
+  const userInfo = useSelector((state) => state.user.userInfo);
   const navigate = useNavigate();
-
-  useEffect(() => {}, []);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!idToken) {
-      navigate("/login");
+      navigate("/auth/login");
     }
+  }, [idToken, navigate, dispatch]);
 
-    // signUp("tri_2@gmail.com", "07112001").then((token) => console.log(token));
-    // createUserBackend("tri_1@gmail.com", "07112001").then((data) =>
-    //   console.log(data)
-    // );
-  }, [idToken, navigate]);
+  useEffect(() => {
+    if (idToken && !userInfo) {
+      getUserInfo(idToken).then((userInfo) => dispatch(setUserInfo(userInfo)));
+    }
+  }, [idToken, userInfo]);
   return (
     <div className="App relative w-screen h-screen max-w-full flex flex-col items-center justify-between bg-gray-100">
       {isLoading && <Loader />}

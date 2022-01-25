@@ -3,6 +3,7 @@ import { secondaryButtonStyleClassName } from "../../designComponents/Button/but
 import { logOut } from "../../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "../../redux/reducers/loader/loaderReducer";
+import { removeUserInfo } from "../../redux/reducers/user/userReducer";
 import { useDispatch } from "react-redux";
 
 function NavBar() {
@@ -19,7 +20,8 @@ function NavBar() {
           dispatch(setLoading(true));
           logOut().then(() => {
             dispatch(setLoading(false));
-            navigate("/login");
+            dispatch(removeUserInfo());
+            navigate("/auth/login");
           });
         }}
       >

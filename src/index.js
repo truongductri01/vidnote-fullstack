@@ -12,14 +12,16 @@ import NoteEditScreen from "./screens/NoteEditScreen";
 import GalleryScreen from "./screens/GalleryScreen";
 import AuthScreen from "./screens/AuthScreen";
 import LogIn from "./components/Login/LogIn";
+import SignUp from "./components/SignUp/SignUp";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<AuthScreen />}>
-            <Route index element={<LogIn />}></Route>
+          <Route path="/auth" element={<AuthScreen />}>
+            <Route path="login" element={<LogIn />}></Route>
+            <Route path="signup" element={<SignUp />}></Route>
           </Route>
           <Route path="/" element={<App />}>
             <Route index element={<SearchScreen />}></Route>

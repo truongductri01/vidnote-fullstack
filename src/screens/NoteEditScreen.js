@@ -36,8 +36,8 @@ function NoteEditScreen() {
     dispatch(setLoading(true));
     getNoteByVidId(selectedNote?.id ? selectedNote.id : noteId)
       .then((res) => {
+        dispatch(setLoading(false));
         if (res) {
-          dispatch(setLoading(false));
           setData({ ...data, ...res });
         }
       })
