@@ -1,5 +1,7 @@
+import React from "react";
+
 function Button({ priority }) {
-  if (priority == "primary") {
+  if (priority === "primary") {
     return <PrimaryButton />;
   }
   return <SecondaryButton />;
