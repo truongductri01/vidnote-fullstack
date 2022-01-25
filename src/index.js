@@ -10,12 +10,17 @@ import store from "./redux/store";
 import NotesScreen from "./screens/NotesScreen";
 import NoteEditScreen from "./screens/NoteEditScreen";
 import GalleryScreen from "./screens/GalleryScreen";
+import AuthScreen from "./screens/AuthScreen";
+import LogIn from "./components/Login/LogIn";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<AuthScreen />}>
+            <Route index element={<LogIn />}></Route>
+          </Route>
           <Route path="/" element={<App />}>
             <Route index element={<SearchScreen />}></Route>
             <Route path="notes" element={<NotesScreen />}>
