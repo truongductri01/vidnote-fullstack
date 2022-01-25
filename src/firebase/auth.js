@@ -11,6 +11,8 @@ import {
 import app from "./config";
 
 const auth = getAuth(app);
+const baseURL = "https://vidnote-api.herokuapp.com";
+// const baseURL = "http://localhost:8080";
 
 async function logOut() {
   await signOut(auth);
@@ -35,7 +37,7 @@ async function signUp(email, pasword) {
 }
 
 async function getUserInfo(idToken) {
-  let userInfo = await fetch("http://localhost:8080/v1/api/auth/user-info", {
+  let userInfo = await fetch(baseURL + "/v1/api/auth/user-info", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${idToken}`,
@@ -47,7 +49,7 @@ async function getUserInfo(idToken) {
 }
 
 async function createUserBackend(idToken) {
-  let user = await fetch("http://localhost:8080/v1/api/auth/signup", {
+  let user = await fetch(baseURL + "/v1/api/auth/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
