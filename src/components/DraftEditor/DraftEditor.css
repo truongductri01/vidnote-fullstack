@@ -1,12 +1,18 @@
 div.DraftEditor-root {
   box-sizing: border-box;
-  border: 1px solid #000;
-  background-color: beige;
+  border: 2px solid #5b21b6;
+  border-radius: 8px;
+  background-color: #f3f4f6;
   width: 100%;
   flex-grow: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 div.DraftEditor-editorContainer,
 div.public-DraftEditor-content {
   height: 100%;
+}
+div.DraftEditor-editorContainer,
+div.public-DraftEditorPlaceholder-root {
+  padding: 8px;
 }
