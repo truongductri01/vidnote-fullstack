@@ -9,10 +9,14 @@ import { logOut } from "../../firebase/auth";
 function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const linkClass = "mr-3";
   return (
     <div className="NavBar w-full h-12 px-2 box-border flex flex-shrink-0 items-center bg-violet-700 text-gray-50 text-base leading-6">
-      <Link to={"/"}>
+      <Link to={"/"} className={linkClass}>
         <p>Home</p>
+      </Link>
+      <Link to={"/notes"} className={linkClass}>
+        <p>Notes</p>
       </Link>
       <button
         className={secondaryButtonStyleClassName.small + " ml-auto"}

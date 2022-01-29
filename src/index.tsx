@@ -12,6 +12,7 @@ import NotesScreen from "./screens/NotesScreen";
 import AuthScreen from "./screens/AuthScreen";
 import LogIn from "./components/Login/LogIn";
 import SignUp from "./components/SignUp/SignUp";
+import NotesContainer from "./components/NotesContainer/NotesContainer";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,7 +26,7 @@ ReactDOM.render(
           <Route path="/" element={<App />}>
             <Route index element={<SearchScreen />}></Route>
             <Route path="notes" element={<NotesScreen />}>
-              <Route index element={<h1>NotesScreen</h1>} />
+              <Route index element={<NotesContainer />} />
               <Route path=":noteId" element={<NoteEditScreen />} />
             </Route>
           </Route>

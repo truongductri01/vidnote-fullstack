@@ -18,6 +18,11 @@ let initialState: NotesState = {
       note: "",
       videoId: "",
       status: "",
+      video: {
+        url: "",
+        channelTitle: "",
+        title: "",
+      },
     },
     video: null,
   },

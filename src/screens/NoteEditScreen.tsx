@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import DraftEditor from "../components/DraftEditor/DraftEditor";
 import { useParams, useSearchParams } from "react-router-dom";
 import { EditorState, ContentState } from "draft-js";
-import { setSelectedNote } from "../redux/reducers/notes/notesReducer";
+import {
+  setNotes,
+  setSelectedNote,
+} from "../redux/reducers/notes/notesReducer";
 import { setLoader } from "../redux/reducers/loader/loaderReducer";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { stringDelimeter } from "../constants";
@@ -15,6 +18,7 @@ function NoteEditScreen() {
   const { noteId } = useParams();
   const videoId = searchParams.get("videoId");
   const selectedNote = useAppSelector((state) => state.notes.selectedNote);
+  const notes = useAppSelector((state) => state.notes.notes);
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const [editorState, setEditorState] = React.useState(() =>
     EditorState.createWithContent(
@@ -24,27 +28,29 @@ function NoteEditScreen() {
   const [data, setData] = useState(selectedNote);
 
   useEffect(() => {
-    dispatch(setLoader(true));
-    getNoteById(
-      selectedNote?.noteData?.id ? selectedNote?.noteData?.id : noteId
-    )
-      .then((res: any) => {
-        dispatch(setLoader(false));
-        if (res) {
-          if (res.note) {
-            setEditorState(() =>
-              EditorState.createWithContent(
-                ContentState.createFromText(res.note, stringDelimeter)
-              )
-            );
+    if (!selectedNote.noteData.id) {
+      dispatch(setLoader(true));
+      getNoteById(
+        selectedNote?.noteData?.id ? selectedNote?.noteData?.id : noteId
+      )
+        .then((res: any) => {
+          dispatch(setLoader(false));
+          if (res) {
+            if (res.note) {
+              setEditorState(() =>
+                EditorState.createWithContent(
+                  ContentState.createFromText(res.note, stringDelimeter)
+                )
+              );
+            }
+            setData({ ...data, noteData: { ...data.noteData, ...res } });
           }
-          setData({ ...data, noteData: { ...data.noteData, ...res } });
-        }
-      })
-      .catch((e) => {
-        dispatch(setLoader(false));
-        alert(e);
-      });
+        })
+        .catch((e) => {
+          dispatch(setLoader(false));
+          alert("Error in note edit screen " + e);
+        });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -60,7 +66,7 @@ function NoteEditScreen() {
           className="min-w-10 w-full h-max p-2 bg-violet-800 text-gray-100 mt-2 rounded-lg"
           onClick={() => {
             dispatch(setLoader(true));
-            setNoteBackend({
+            const newData = {
               id: selectedNote?.noteData?.id
                 ? selectedNote.noteData.id
                 : noteId,
@@ -70,10 +76,26 @@ function NoteEditScreen() {
               status: "public",
               videoId: videoId,
               authorId: userInfo.id,
-            })
+              video: {
+                url: selectedNote.video?.snippet?.thumbnails.medium.url,
+                title: selectedNote.video?.snippet.title,
+                channelTitle: selectedNote.video?.snippet.channelTitle,
+              },
+            };
+            setNoteBackend(newData)
               .then((isSuccess: boolean) => {
                 if (isSuccess) {
                   alert("Data is saved");
+                  dispatch(
+                    setNotes(
+                      notes.map((note) => {
+                        if (note.id == data.noteData.id) {
+                          return data;
+                        }
+                        return note;
+                      })
+                    )
+                  );
                   dispatch(setSelectedNote(data));
                 }
                 dispatch(setLoader(false));

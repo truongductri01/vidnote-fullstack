@@ -21,8 +21,6 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    getAllNotesBackend().then((data) => console.log(data));
-
     if (!idToken) {
       navigate("/auth/login");
     } else {
@@ -51,7 +49,7 @@ function App() {
   }, [idToken, navigate, dispatch, userInfo]);
 
   return (
-    <div className="App relative w-screen h-screen max-w-full flex flex-col items-center justify-between bg-gray-100">
+    <div className="App relative w-screen h-screen max-w-full flex flex-col items-center justify-between">
       {isLoading && <Loader />}
       {/* <Toast /> */}
       <NavBar />
