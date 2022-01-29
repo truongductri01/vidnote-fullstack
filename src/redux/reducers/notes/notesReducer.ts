@@ -1,12 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { NoteData } from "../../../types/noteFetchingDataType";
+import { YouTubeVideoSearchResult } from "../../../types/youtubeResponseType";
 
 type NotesState = {
   notes: any[];
-  selectedNote: any;
+  selectedNote: {
+    noteData: NoteData;
+    video: YouTubeVideoSearchResult | null;
+  };
 };
 let initialState: NotesState = {
   notes: [],
-  selectedNote: {},
+  selectedNote: {
+    noteData: {
+      id: "",
+      authorId: "",
+      note: "",
+      videoId: "",
+      status: "",
+    },
+    video: null,
+  },
 };
 
 const notesSlice = createSlice({

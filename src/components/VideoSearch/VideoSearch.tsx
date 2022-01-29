@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { YOUTUBE_API_KEY, defaultSearchResultLength } from "../../constants";
-import { fetchYoutube } from "../../helpers/utils";
+import { fetchYoutubeBackend } from "../../apis/youtubeApis";
+import { defaultSearchResultLength } from "../../constants";
 import { useAppDispatch } from "../../redux/hooks";
 import { setLoader } from "../../redux/reducers/loader/loaderReducer";
 import { primaryButtonStyleClassName } from "../../styles/buttonStyles";
@@ -15,7 +15,7 @@ function VideoSearch(props: any) {
 
   const handleSubmit = () => {
     dispatch(setLoader(true));
-    fetchYoutube(keyword, defaultSearchResultLength, YOUTUBE_API_KEY)
+    fetchYoutubeBackend(keyword, defaultSearchResultLength)
       .then((data) => {
         dispatch(setLoader(false));
         setVideos(data.items);
