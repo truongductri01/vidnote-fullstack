@@ -6,3 +6,10 @@ export type UserInfo = {
   avatarUrl: string;
   notesId: string[];
 };
+
+export type NewUserSignUp = {
+  firstName: string;
+  lastName: string;
+  searchable: boolean;
+  avatarUrl: string;
+};

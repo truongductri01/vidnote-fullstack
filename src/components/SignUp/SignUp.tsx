@@ -9,11 +9,17 @@ import {
   primaryButtonStyleClassName,
   secondaryButtonStyleClassName,
 } from "../../styles/buttonStyles";
+import RadioButtons from "../../designComponents/RadioButtons/RadioButtons";
+import { NewUserSignUp } from "../../types/userTypes";
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [searchable, setSearchable] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState("");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   return (
@@ -38,15 +44,58 @@ function SignUp() {
           className={primaryInputStyleClassName + " mb-5"}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+
+        <label htmlFor="">First name</label>
+        <input
+          type="text"
+          className={primaryInputStyleClassName + " mb-5"}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+
+        <label htmlFor="">Last name</label>
+        <input
+          type="text"
+          className={primaryInputStyleClassName + " mb-5"}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+
+        <RadioButtons
+          label="Can people see your profile"
+          onChange={(value: string) => setSearchable(value == "Yes")}
+          values={["Yes", "No"]}
+          selectedValue={searchable ? "Yes" : "No"}
+        />
+
+        <label htmlFor="">Your avatar Url</label>
+        <input
+          type="text"
+          className={primaryInputStyleClassName + " mb-5"}
+          onChange={(e) => setAvatarUrl(e.target.value)}
+        />
       </form>
 
       <div className="flex flex-col">
         <button
+          disabled={
+            password === confirmPassword &&
+            password &&
+            firstName &&
+            lastName &&
+            avatarUrl
+              ? false
+              : true
+          }
           onClick={(e) => {
             e.preventDefault();
             if (password === confirmPassword) {
+              const userData: NewUserSignUp = {
+                firstName: firstName,
+                lastName,
+                searchable,
+                avatarUrl,
+              };
               dispatch(setLoader(true));
-              signUp(email, password)
+              signUp(email, password, userData)
                 .then((userInfo) => {
                   dispatch(setLoader(false));
                   dispatch(setUserInfo(userInfo));
@@ -57,7 +106,10 @@ function SignUp() {
                 });
             }
           }}
-          className={primaryButtonStyleClassName}
+          className={
+            primaryButtonStyleClassName +
+            " disabled:cursor-default disabled:bg-gray-400"
+          }
         >
           Register
         </button>

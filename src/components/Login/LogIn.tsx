@@ -15,10 +15,30 @@ function LogIn() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const handleLogInSubmit = () => {
+    dispatch(setLoader(true));
+    signIn(email, password)
+      .then((idToken) => {
+        dispatch(setLoader(false));
+        if (idToken) {
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        dispatch(setLoader(false));
+      });
+  };
+
   return (
     <div className="LogIn w-full">
       <h1 className="text-2xl text-center font-bold">Login</h1>
-      <form className="flex flex-col">
+      <form
+        className="flex flex-col"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogInSubmit();
+        }}
+      >
         <label htmlFor="">Email</label>
         <input
           type="email"
@@ -31,28 +51,17 @@ function LogIn() {
           className={primaryInputStyleClassName + " mb-5"}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </form>
-      <div className="flex flex-col">
         <button
           onClick={(e) => {
             e.preventDefault();
-            dispatch(setLoader(true));
-            signIn(email, password)
-              .then((idToken) => {
-                dispatch(setLoader(false));
-                if (idToken) {
-                  navigate("/");
-                }
-              })
-              .catch(() => {
-                dispatch(setLoader(false));
-              });
+            handleLogInSubmit();
           }}
           className={primaryButtonStyleClassName}
         >
           Login
         </button>
-
+      </form>
+      <div className="flex flex-col">
         <button
           className={secondaryButtonStyleClassName.default + " mt-10"}
           onClick={() => navigate("/auth/signup")}

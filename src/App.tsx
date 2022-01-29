@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getIdTokenLocalStorage } from "./helpers/localStorageUtils";
-import { getUserInfo, logOut } from "./firebase/auth";
+import { logOut } from "./firebase/auth";
 import { setUserInfo } from "./redux/reducers/user/userReducer";
-import { isValidIdToken } from "./apis/authApis";
+import { getUserInfoBackend, isValidIdToken } from "./apis/authApis";
 import { setLoader } from "./redux/reducers/loader/loaderReducer";
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
       isValidIdToken(idToken).then((isValid) => {
         if (isValid) {
           if (!userInfo.id) {
-            getUserInfo(idToken).then((userInfo) => {
+            getUserInfoBackend().then((userInfo) => {
               dispatch(setUserInfo(userInfo));
               dispatch(setLoader(false));
             });
