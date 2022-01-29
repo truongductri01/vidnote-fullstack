@@ -41,8 +41,9 @@ function NoteEditScreen() {
           setData({ ...data, noteData: { ...data.noteData, ...res } });
         }
       })
-      .catch(() => {
+      .catch((e) => {
         dispatch(setLoader(false));
+        alert(e);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -77,8 +78,9 @@ function NoteEditScreen() {
                 }
                 dispatch(setLoader(false));
               })
-              .catch(() => {
+              .catch((e) => {
                 dispatch(setLoader(false));
+                alert(e);
               });
           }}
         >

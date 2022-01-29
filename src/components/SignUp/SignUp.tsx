@@ -101,8 +101,9 @@ function SignUp() {
                   dispatch(setUserInfo(userInfo));
                   navigate("/");
                 })
-                .catch(() => {
+                .catch((e) => {
                   dispatch(setLoader(false));
+                  alert(e);
                 });
             }
           }}

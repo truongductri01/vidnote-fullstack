@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchYoutubeVideoByIdBackend } from "../../apis/youtubeApis";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setSelectedNote } from "../../redux/reducers/notes/notesReducer";
 import { YouTubeVideoSearchResult } from "../../types/youtubeResponseType";
 
 function NoteVideo({
@@ -12,6 +14,8 @@ function NoteVideo({
   const [hasData, setHasData] = useState(video ? true : false);
   const [videoData, setVideoData] = useState(video ? video : {});
   const [isVideoFormat, setIsVideoFormat] = useState(false);
+  const selectedNote = useAppSelector((state) => state.notes.selectedNote);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!video) {
@@ -20,6 +24,7 @@ function NoteVideo({
           setHasData(true);
         }
         setVideoData({ ...data });
+        dispatch(setSelectedNote({ ...selectedNote, video: data }));
       });
     }
   }, []);

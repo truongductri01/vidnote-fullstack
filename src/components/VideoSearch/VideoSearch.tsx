@@ -20,7 +20,10 @@ function VideoSearch(props: any) {
         dispatch(setLoader(false));
         setVideos(data.items);
       })
-      .catch((err: any) => dispatch(setLoader(false)));
+      .catch((err: any) => {
+        dispatch(setLoader(false));
+        alert(err);
+      });
   };
 
   return (
