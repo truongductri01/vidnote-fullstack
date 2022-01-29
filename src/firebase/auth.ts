@@ -11,8 +11,8 @@ import {
 import app from "./config";
 
 const auth = getAuth(app);
-const baseURL = "https://vidnote-api.herokuapp.com";
-// const baseURL = "http://localhost:8080";
+// const baseURL = "https://vidnote-api.herokuapp.com";
+const baseURL = "http://localhost:8080";
 
 async function logOut() {
   await signOut(auth);

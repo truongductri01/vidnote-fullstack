@@ -6,8 +6,10 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getIdTokenLocalStorage } from "./helpers/localStorageUtils";
-import { getUserInfo } from "./firebase/auth";
+import { getUserInfo, logOut } from "./firebase/auth";
 import { setUserInfo } from "./redux/reducers/user/userReducer";
+import { isValidIdToken } from "./apis/authApis";
+import { setLoader } from "./redux/reducers/loader/loaderReducer";
 
 function App() {
   const isLoading = useAppSelector((state) => state.loader.isLoading);
@@ -19,14 +21,25 @@ function App() {
   useEffect(() => {
     if (!idToken) {
       navigate("/auth/login");
+    } else {
+      dispatch(setLoader(true));
+      isValidIdToken(idToken).then((isValid) => {
+        if (isValid) {
+          if (!userInfo.id) {
+            getUserInfo(idToken).then((userInfo) => {
+              dispatch(setUserInfo(userInfo));
+              dispatch(setLoader(false));
+            });
+          }
+          dispatch(setLoader(false));
+        } else {
+          logOut();
+          navigate("/auth/login");
+          dispatch(setLoader(false));
+        }
+      });
     }
-  }, [idToken, navigate, dispatch]);
-
-  useEffect(() => {
-    if (idToken && !userInfo) {
-      getUserInfo(idToken).then((userInfo) => dispatch(setUserInfo(userInfo)));
-    }
-  }, [idToken, userInfo, dispatch]);
+  }, [idToken, navigate, dispatch, userInfo]);
 
   return (
     <div className="App relative w-screen h-screen max-w-full flex flex-col items-center justify-between bg-gray-100">
