@@ -31,8 +31,17 @@ const getNoteById = async (noteId: string | null | undefined) => {
         Authorization: authorizationToken,
       },
     })
-      .then((res) => res.json())
-      .then((data) => data);
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("New Note found");
+        }
+      })
+      .then((data) => data)
+      .catch((e) => {
+        return null;
+      });
   }
   return null;
 };

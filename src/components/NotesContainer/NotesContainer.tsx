@@ -22,7 +22,7 @@ function NotesContainer() {
           alert(e);
         });
     }
-  });
+  }, []);
   return (
     <div className="NotesContainer w-full h-full flex-grow flex-shrink-0 p-2">
       {notes.map((noteData: NoteData) => (
