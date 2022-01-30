@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { setLoader } from "../../redux/reducers/loader/loaderReducer";
-import { removeUserInfo } from "../../redux/reducers/user/userReducer";
 import { useDispatch } from "react-redux";
 import { secondaryButtonStyleClassName } from "../../styles/buttonStyles";
-import { logOut } from "../../firebase/auth";
+import { logOutAndClearData } from "../../helpers/logout";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -22,9 +21,8 @@ function NavBar() {
         className={secondaryButtonStyleClassName.small + " ml-auto"}
         onClick={() => {
           dispatch(setLoader(true));
-          logOut().then(() => {
+          logOutAndClearData(dispatch).then(() => {
             dispatch(setLoader(false));
-            dispatch(removeUserInfo());
             navigate("/auth/login");
           });
         }}

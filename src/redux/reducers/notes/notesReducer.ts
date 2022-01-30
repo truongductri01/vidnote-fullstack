@@ -42,8 +42,26 @@ const notesSlice = createSlice({
     setNotes: (state, actions: PayloadAction<any[]>) => {
       state.notes = actions.payload;
     },
+    resetNotes: (state) => {
+      state.notes = [];
+      state.selectedNote = {
+        noteData: {
+          id: "",
+          authorId: "",
+          note: "",
+          videoId: "",
+          status: "",
+          video: {
+            url: "",
+            channelTitle: "",
+            title: "",
+          },
+        },
+        video: null,
+      };
+    },
   },
 });
 
-export const { setNotes, setSelectedNote } = notesSlice.actions;
+export const { setNotes, setSelectedNote, resetNotes } = notesSlice.actions;
 export default notesSlice.reducer;

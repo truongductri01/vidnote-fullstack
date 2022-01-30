@@ -6,12 +6,11 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getIdTokenLocalStorage } from "./helpers/localStorageUtils";
-import { logOut } from "./firebase/auth";
 import { setUserInfo } from "./redux/reducers/user/userReducer";
 import { getUserInfoBackend, isValidIdToken } from "./apis/authApis";
 import { setLoader } from "./redux/reducers/loader/loaderReducer";
 import Toast from "./designComponents/Toast/Toast";
-import { getAllNotesBackend } from "./apis/noteApis";
+import { logOutAndClearData } from "./helpers/logout";
 
 function App() {
   const isLoading = useAppSelector((state) => state.loader.isLoading);
@@ -36,9 +35,15 @@ function App() {
             }
             dispatch(setLoader(false));
           } else {
-            logOut();
-            navigate("/auth/login");
-            dispatch(setLoader(false));
+            logOutAndClearData(dispatch)
+              .then(() => {
+                navigate("/auth/login");
+                dispatch(setLoader(false));
+              })
+              .catch((e) => {
+                alert("Error while logging out" + e);
+                dispatch(setLoader(false));
+              });
           }
         })
         .catch((e) => {
