@@ -13,7 +13,7 @@ function NoteCard({ noteData }: { noteData: NoteData }) {
       className="NoteCard w-full h-max shadow-2xl border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-3 hover:bg-gray-200 hover:scale-[1.02] md:hover:scale-[1.01] p-2 box-border flex flex-col sm:flex-row"
       key={noteData.id}
       onClick={() => {
-        dispatch(setSelectedNote({ ...noteData, video: null }));
+        dispatch(setSelectedNote({ noteData: { ...noteData }, video: null }));
         navigate(
           `/notes/${userInfo.id + noteData.videoId}?videoId=${noteData.videoId}`
         );

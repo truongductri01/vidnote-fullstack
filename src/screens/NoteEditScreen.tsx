@@ -11,6 +11,8 @@ import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { stringDelimeter } from "../constants";
 import NoteVideo from "../components/NoteVideo/NoteVideo";
 import { getNoteById, setNoteBackend } from "../apis/noteApis";
+import { NoteData } from "../types/noteFetchingDataType";
+import { fetchYoutubeVideoByIdBackend } from "../apis/youtubeApis";
 
 function NoteEditScreen() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,10 +24,14 @@ function NoteEditScreen() {
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const [editorState, setEditorState] = React.useState(() =>
     EditorState.createWithContent(
-      ContentState.createFromText("", stringDelimeter)
+      ContentState.createFromText(selectedNote.noteData.note, stringDelimeter)
     )
   );
   const [data, setData] = useState(selectedNote);
+
+  useEffect(() => {
+    setData(selectedNote);
+  }, [selectedNote]);
 
   useEffect(() => {
     if (!selectedNote.noteData.id) {
@@ -43,6 +49,12 @@ function NoteEditScreen() {
                 )
               );
             }
+            dispatch(
+              setSelectedNote({
+                ...selectedNote,
+                noteData: { ...res },
+              })
+            );
             setData({ ...data, noteData: { ...data.noteData, ...res } });
           }
         })
@@ -54,9 +66,30 @@ function NoteEditScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (
+      selectedNote.noteData.id &&
+      selectedNote.noteData.videoId &&
+      !selectedNote.video
+    ) {
+      if (!selectedNote.video) {
+        fetchYoutubeVideoByIdBackend(selectedNote.noteData.videoId).then(
+          (videoData) => {
+            dispatch(
+              setSelectedNote({
+                noteData: { ...selectedNote.noteData },
+                video: videoData,
+              })
+            );
+          }
+        );
+      }
+    }
+  }, [selectedNote.noteData.id]);
+
   return (
     <div className="NoteEditScreen w-full flex-grow flex flex-col items-start overflow-y-auto lg:flex-row">
-      {videoId && <NoteVideo video={data.video} videoId={videoId} />}
+      {selectedNote.video && <NoteVideo video={selectedNote.video} />}
       <div className="flex-grow w-full flex flex-col overflow-y-auto lg:h-full">
         <DraftEditor
           editorState={editorState}
@@ -86,17 +119,29 @@ function NoteEditScreen() {
               .then((isSuccess: boolean) => {
                 if (isSuccess) {
                   alert("Data is saved");
-                  dispatch(
-                    setNotes(
-                      notes.map((note) => {
-                        if (note.id == data.noteData.id) {
-                          return data;
-                        }
-                        return note;
-                      })
-                    )
-                  );
-                  dispatch(setSelectedNote(data));
+                  dispatch(setSelectedNote({ ...data }));
+                  let hasNote = false;
+                  for (let note of notes) {
+                    if (note.id === newData.id) {
+                      hasNote = true;
+                      break;
+                    }
+                  }
+                  if (!hasNote) {
+                    dispatch(setNotes([...notes, { ...newData }]));
+                  } else {
+                    dispatch(
+                      setNotes(
+                        notes.map((note: NoteData) => {
+                          if (note.id == newData.id) {
+                            return { ...newData };
+                          } else {
+                            return { ...note };
+                          }
+                        })
+                      )
+                    );
+                  }
                 }
                 dispatch(setLoader(false));
               })
