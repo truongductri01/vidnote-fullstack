@@ -24,8 +24,9 @@ function LogIn() {
           navigate("/");
         }
       })
-      .catch(() => {
+      .catch((e) => {
         dispatch(setLoader(false));
+        alert(e);
       });
   };
 

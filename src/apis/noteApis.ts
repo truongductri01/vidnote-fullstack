@@ -10,10 +10,17 @@ export const noteRoutes = {
   postPutSetSingle: apiURL + "/notes/set-note",
   putUpdateSingle: apiURL + "/notes/update-note",
 };
-const getAllNotes = async (authorizationToken: string) => {
-  if (authorizationToken) {
-    let data = await fetch(baseURL + noteRoutes.getAll);
+const getAllNotesBackend = async () => {
+  let idToken = getIdTokenLocalStorage();
+  if (idToken) {
+    let data = await fetch(baseURL + noteRoutes.getAll, {
+      headers: { Authorization: "Bearer " + idToken },
+    })
+      .then((res) => res.json())
+      .then((notesList) => notesList);
+    return data;
   }
+  return null;
 };
 const getNoteById = async (noteId: string | null | undefined) => {
   let idToken = getIdTokenLocalStorage();
@@ -24,8 +31,17 @@ const getNoteById = async (noteId: string | null | undefined) => {
         Authorization: authorizationToken,
       },
     })
-      .then((res) => res.json())
-      .then((data) => data);
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("New Note found");
+        }
+      })
+      .then((data) => data)
+      .catch((e) => {
+        return null;
+      });
   }
   return null;
 };
@@ -46,4 +62,4 @@ const setNoteBackend = async (noteData: NoteData) => {
   }
   return false;
 };
-export { getAllNotes, getNoteById, setNoteBackend };
+export { getAllNotesBackend, getNoteById, setNoteBackend };

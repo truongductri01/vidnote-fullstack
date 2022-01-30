@@ -12,13 +12,14 @@ function VideoSearchCard({ video }: VideoSearchCardProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userInfo = useAppSelector((state) => state.user.userInfo);
+  const selectedNote = useAppSelector((state) => state.notes.selectedNote);
   return (
     <div
-      className="VideoSearchCar w-full cursor-pointer mb-3 bg-yellow-400 rounded-lg py-2 px-3"
+      className="VideoSearchCar w-full cursor-pointer mb-3 bg-yellow-400 rounded-lg py-2 px-3 flex flex-col sm:flex-row"
       onClick={() => {
         dispatch(
           setSelectedNote({
-            id: userInfo.id + video.id.videoId,
+            ...selectedNote,
             video: video,
           })
         );
@@ -27,8 +28,12 @@ function VideoSearchCard({ video }: VideoSearchCardProps) {
         );
       }}
     >
-      <h3>{video.snippet.title}</h3>
-      <img src={video.snippet.thumbnails.medium.url} alt="" />
+      <p className="font-bold sm:order-last sm:ml-2">{video.snippet.title}</p>
+      <img
+        src={video.snippet.thumbnails.medium.url}
+        alt=""
+        className="rounded-md max-w-[320px]"
+      />
     </div>
   );
 }
