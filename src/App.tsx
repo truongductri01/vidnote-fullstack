@@ -51,7 +51,8 @@ function App() {
           alert(e);
         });
     }
-  }, [idToken, navigate, dispatch, userInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idToken]);
 
   return (
     <div className="App relative w-screen h-screen max-w-full flex flex-col items-center justify-between">

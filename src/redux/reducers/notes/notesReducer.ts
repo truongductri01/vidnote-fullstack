@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { NoteData } from "../../../types/noteFetchingDataType";
 import { YouTubeVideoSearchResult } from "../../../types/youtubeResponseType";
 
@@ -39,8 +39,28 @@ const notesSlice = createSlice({
         state.selectedNote = actions.payload;
       }
     },
-    setNotes: (state, actions: PayloadAction<any[]>) => {
+    setNotes: (state, actions) => {
       state.notes = actions.payload;
+    },
+    resetSelectedNote: (state) => {
+      state.selectedNote = {
+        noteData: {
+          id: "",
+          authorId: "",
+          note: "",
+          videoId: "",
+          status: "",
+          video: {
+            url: "",
+            channelTitle: "",
+            title: "",
+          },
+        },
+        video: null,
+      };
+    },
+    setSelectedNoteVideo: (state, actions) => {
+      state.selectedNote.video = actions.payload;
     },
     resetNotes: (state) => {
       state.notes = [];
@@ -63,5 +83,11 @@ const notesSlice = createSlice({
   },
 });
 
-export const { setNotes, setSelectedNote, resetNotes } = notesSlice.actions;
+export const {
+  setNotes,
+  setSelectedNote,
+  resetNotes,
+  resetSelectedNote,
+  setSelectedNoteVideo,
+} = notesSlice.actions;
 export default notesSlice.reducer;

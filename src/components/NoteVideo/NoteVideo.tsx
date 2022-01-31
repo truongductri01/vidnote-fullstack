@@ -20,7 +20,7 @@ function NoteVideo({ video }: { video: YouTubeVideoSearchResult }) {
           <iframe
             className="w-full flex-grow h-max sm:h-[180px]"
             src={`https://www.youtube.com/embed/${
-              (video as YouTubeVideoSearchResult)?.id?.videoId
+              (video as YouTubeVideoSearchResult)?.id?.videoId || video?.id
             }`}
             title="YouTube video player"
             frameBorder="0"

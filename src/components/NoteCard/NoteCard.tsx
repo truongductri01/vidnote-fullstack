@@ -7,13 +7,23 @@ import { NoteData } from "../../types/noteFetchingDataType";
 function NoteCard({ noteData }: { noteData: NoteData }) {
   const navigate = useNavigate();
   const userInfo = useAppSelector((state) => state.user.userInfo);
+  const selectedNote = useAppSelector((state) => state.notes.selectedNote);
   const dispatch = useAppDispatch();
   return (
     <div
-      className="NoteCard w-full h-max shadow-2xl border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-3 hover:bg-gray-200 hover:scale-[1.02] md:hover:scale-[1.01] p-2 box-border flex flex-col sm:flex-row"
+      className="NoteCard w-full h-max drop-shadow-xl border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-4 hover:bg-gray-200 hover:scale-[1.02] md:hover:scale-[1.01] p-2 box-border flex flex-col sm:flex-row last:mb-0"
       key={noteData.id}
       onClick={() => {
-        dispatch(setSelectedNote({ noteData: { ...noteData }, video: null }));
+        if (
+          selectedNote.noteData.videoId &&
+          noteData.videoId !== selectedNote.noteData.videoId
+        ) {
+          dispatch(setSelectedNote({ noteData: { ...noteData }, video: null }));
+        } else {
+          dispatch(
+            setSelectedNote({ ...selectedNote, noteData: { ...noteData } })
+          );
+        }
         navigate(
           `/notes/${userInfo.id + noteData.videoId}?videoId=${noteData.videoId}`
         );

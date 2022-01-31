@@ -1,6 +1,10 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setSelectedNote } from "../../redux/reducers/notes/notesReducer";
+import {
+  resetSelectedNote,
+  setSelectedNote,
+  setSelectedNoteVideo,
+} from "../../redux/reducers/notes/notesReducer";
 import { useNavigate } from "react-router-dom";
 import { YouTubeVideoSearchResult } from "../../types/youtubeResponseType";
 
@@ -17,10 +21,12 @@ function VideoSearchCard({ video }: VideoSearchCardProps) {
     <div
       className="VideoSearchCar w-full cursor-pointer mb-3 bg-yellow-400 rounded-lg py-2 px-3 flex flex-col sm:flex-row"
       onClick={() => {
+        if (userInfo.id + video.id.videoId !== selectedNote.noteData.id) {
+          dispatch(resetSelectedNote());
+        }
         dispatch(
-          setSelectedNote({
-            ...selectedNote,
-            video: video,
+          setSelectedNoteVideo({
+            ...video,
           })
         );
         navigate(

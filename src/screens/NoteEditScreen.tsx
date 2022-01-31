@@ -13,6 +13,7 @@ import NoteVideo from "../components/NoteVideo/NoteVideo";
 import { getNoteById, setNoteBackend } from "../apis/noteApis";
 import { NoteData } from "../types/noteFetchingDataType";
 import { fetchYoutubeVideoByIdBackend } from "../apis/youtubeApis";
+import { setUserInfo } from "../redux/reducers/user/userReducer";
 
 function NoteEditScreen() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,17 +73,22 @@ function NoteEditScreen() {
       selectedNote.noteData.videoId &&
       !selectedNote.video
     ) {
-      if (!selectedNote.video) {
-        fetchYoutubeVideoByIdBackend(selectedNote.noteData.videoId).then(
-          (videoData) => {
+      if (!selectedNote.video || (selectedNote.video as any)?.id != videoId) {
+        dispatch(setLoader(true));
+        fetchYoutubeVideoByIdBackend(selectedNote.noteData.videoId)
+          .then((videoData) => {
             dispatch(
               setSelectedNote({
                 noteData: { ...selectedNote.noteData },
-                video: videoData,
+                video: { ...videoData },
               })
             );
-          }
-        );
+            dispatch(setLoader(false));
+          })
+          .catch((e) => {
+            dispatch(setLoader(false));
+            alert("Error while fetching youtube video" + e);
+          });
       }
     }
   }, [selectedNote.noteData.id]);
@@ -140,6 +146,19 @@ function NoteEditScreen() {
                           }
                         })
                       )
+                    );
+                  }
+
+                  // update user notes id list => prevent unneccesary fetching on notes screen
+                  let hasIdInUserInfo = userInfo.notesId.includes(
+                    newData.id as any
+                  );
+                  if (!hasIdInUserInfo) {
+                    dispatch(
+                      setUserInfo({
+                        ...userInfo,
+                        notesId: [...userInfo.notesId, newData.id],
+                      })
                     );
                   }
                 }
