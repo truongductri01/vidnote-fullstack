@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
 import Loader from "./designComponents/Loader/Loader";
@@ -18,6 +18,13 @@ function App() {
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [appHeight, setAppHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setAppHeight(window.innerHeight);
+    });
+  }, []);
 
   useEffect(() => {
     if (!idToken) {
@@ -55,7 +62,13 @@ function App() {
   }, [idToken]);
 
   return (
-    <div className="App relative w-screen h-screen max-w-full flex flex-col items-center justify-between">
+    <div
+      id="vidnote-app"
+      className="App relative w-screen max-w-full flex flex-col items-center justify-between box-border"
+      style={{
+        height: `${appHeight}px`,
+      }}
+    >
       {isLoading && <Loader />}
       {/* <Toast /> */}
       <NavBar />
