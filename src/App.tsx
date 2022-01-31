@@ -24,6 +24,9 @@ function App() {
     window.addEventListener("resize", () => {
       setAppHeight(window.innerHeight);
     });
+    window.addEventListener("orientationchange", () => {
+      setAppHeight(window.innerHeight);
+    });
   }, []);
 
   useEffect(() => {
