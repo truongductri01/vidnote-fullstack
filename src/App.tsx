@@ -67,7 +67,7 @@ function App() {
   return (
     <div
       id="vidnote-app"
-      className="App relative w-screen max-w-full flex flex-col items-center justify-between box-border"
+      className="App relative w-screen max-w-full flex flex-col items-center justify-between box-border overflow-y-auto"
       style={{
         height: `${appHeight}px`,
       }}

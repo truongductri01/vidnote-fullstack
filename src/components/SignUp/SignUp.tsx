@@ -12,6 +12,8 @@ import {
 import RadioButtons from "../../designComponents/RadioButtons/RadioButtons";
 import { NewUserSignUp } from "../../types/userTypes";
 
+const inputStyle = primaryInputStyleClassName + " mb-2";
+
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,39 +25,39 @@ function SignUp() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   return (
-    <div className="SignUp w-full">
+    <div className="SignUp w-full h-full">
       <h1 className="text-4xl text-center font-bold">SignUp</h1>
       <form className="flex flex-col">
         <label htmlFor="">Email</label>
         <input
           type="email"
-          className={primaryInputStyleClassName + " mb-5"}
+          className={inputStyle}
           onChange={(e) => setEmail(e.target.value)}
         />
         <label htmlFor="">Password</label>
         <input
           type="password"
-          className={primaryInputStyleClassName + " mb-5"}
+          className={inputStyle}
           onChange={(e) => setPassword(e.target.value)}
         />
         <label htmlFor="">Confirm Password</label>
         <input
           type="password"
-          className={primaryInputStyleClassName + " mb-5"}
+          className={inputStyle}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         <label htmlFor="">First name</label>
         <input
           type="text"
-          className={primaryInputStyleClassName + " mb-5"}
+          className={inputStyle}
           onChange={(e) => setFirstName(e.target.value)}
         />
 
         <label htmlFor="">Last name</label>
         <input
           type="text"
-          className={primaryInputStyleClassName + " mb-5"}
+          className={inputStyle}
           onChange={(e) => setLastName(e.target.value)}
         />
 
@@ -69,7 +71,7 @@ function SignUp() {
         <label htmlFor="">Your avatar Url</label>
         <input
           type="text"
-          className={primaryInputStyleClassName + " mb-5"}
+          className={inputStyle}
           onChange={(e) => setAvatarUrl(e.target.value)}
         />
       </form>
@@ -116,7 +118,7 @@ function SignUp() {
         </button>
         <button
           onClick={() => navigate("/auth/login")}
-          className={secondaryButtonStyleClassName.default + " mt-10"}
+          className={secondaryButtonStyleClassName.default + " mt-8"}
         >
           Login
         </button>

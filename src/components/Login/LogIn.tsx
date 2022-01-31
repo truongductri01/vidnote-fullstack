@@ -64,7 +64,7 @@ function LogIn() {
       </form>
       <div className="flex flex-col">
         <button
-          className={secondaryButtonStyleClassName.default + " mt-10"}
+          className={secondaryButtonStyleClassName.default + " mt-8"}
           onClick={() => navigate("/auth/signup")}
         >
           Register
