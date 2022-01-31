@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loaderReducer from "./reducers/loader/loaderReducer";
 import notesReducer from "./reducers/notes/notesReducer";
+import toastReducer from "./reducers/toast/toastReducer";
 import userReducer from "./reducers/user/userReducer";
 
 const store = configureStore({
@@ -8,9 +9,7 @@ const store = configureStore({
     loader: loaderReducer,
     notes: notesReducer,
     user: userReducer,
-    // posts: postsReducer,
-    // comments: commentsReducer,
-    // users: usersReducer,
+    toast: toastReducer,
   },
 });
 

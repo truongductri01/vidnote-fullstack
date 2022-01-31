@@ -14,9 +14,10 @@ import { getNoteById, setNoteBackend } from "../apis/noteApis";
 import { NoteData } from "../types/noteFetchingDataType";
 import { fetchYoutubeVideoByIdBackend } from "../apis/youtubeApis";
 import { setUserInfo } from "../redux/reducers/user/userReducer";
+import { setToast } from "../redux/reducers/toast/toastReducer";
 
 function NoteEditScreen() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { noteId } = useParams();
   const videoId = searchParams.get("videoId");
@@ -73,7 +74,7 @@ function NoteEditScreen() {
       selectedNote.noteData.videoId &&
       !selectedNote.video
     ) {
-      if (!selectedNote.video || (selectedNote.video as any)?.id != videoId) {
+      if (!selectedNote.video || (selectedNote.video as any)?.id !== videoId) {
         dispatch(setLoader(true));
         fetchYoutubeVideoByIdBackend(selectedNote.noteData.videoId)
           .then((videoData) => {
@@ -91,6 +92,7 @@ function NoteEditScreen() {
           });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNote.noteData.id]);
 
   return (
@@ -124,7 +126,6 @@ function NoteEditScreen() {
             setNoteBackend(newData)
               .then((isSuccess: boolean) => {
                 if (isSuccess) {
-                  alert("Data is saved");
                   dispatch(setSelectedNote({ ...data }));
                   let hasNote = false;
                   for (let note of notes) {
@@ -139,7 +140,7 @@ function NoteEditScreen() {
                     dispatch(
                       setNotes(
                         notes.map((note: NoteData) => {
-                          if (note.id == newData.id) {
+                          if (note.id === newData.id) {
                             return { ...newData };
                           } else {
                             return { ...note };
@@ -163,10 +164,23 @@ function NoteEditScreen() {
                   }
                 }
                 dispatch(setLoader(false));
+                dispatch(
+                  setToast({
+                    hasToast: true,
+                    type: "success",
+                    message: "Note is saved",
+                  })
+                );
               })
               .catch((e) => {
                 dispatch(setLoader(false));
-                alert(e);
+                dispatch(
+                  setToast({
+                    hasToast: true,
+                    type: "error",
+                    message: "" + e,
+                  })
+                );
               });
           }}
         >

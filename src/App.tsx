@@ -16,6 +16,7 @@ function App() {
   const isLoading = useAppSelector((state) => state.loader.isLoading);
   const idToken = getIdTokenLocalStorage();
   const userInfo = useAppSelector((state) => state.user.userInfo);
+  const toastInfo = useAppSelector((state) => state.toast.toastInfo);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [appHeight, setAppHeight] = useState(window.innerHeight);
@@ -73,7 +74,9 @@ function App() {
       }}
     >
       {isLoading && <Loader />}
-      {/* <Toast /> */}
+      {toastInfo.hasToast && (
+        <Toast type={toastInfo.type} message={toastInfo.message} />
+      )}
       <NavBar />
       <Outlet />
     </div>

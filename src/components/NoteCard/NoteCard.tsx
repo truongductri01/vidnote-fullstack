@@ -11,7 +11,7 @@ function NoteCard({ noteData }: { noteData: NoteData }) {
   const dispatch = useAppDispatch();
   return (
     <div
-      className="NoteCard w-full h-max border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-4 hover:bg-yellow-100 p-2 box-border flex flex-col sm:flex-row last:mb-0"
+      className="NoteCard w-full h-max border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-4 hover:bg-yellow-100 shadow-md shadow-gray-500 p-2 box-border flex flex-col sm:flex-row last:mb-0"
       key={noteData.id}
       onClick={() => {
         if (

@@ -31,7 +31,7 @@ function LogIn() {
   };
 
   return (
-    <div className="LogIn w-full">
+    <div className="LogIn w-full max-w-[400px] h-full flex flex-col justify-center">
       <h1 className="text-2xl text-center font-bold">Login</h1>
       <form
         className="flex flex-col"

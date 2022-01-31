@@ -8,9 +8,9 @@ import { logOutAndClearData } from "../../helpers/logout";
 function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const linkClass = "mr-3";
+  const linkClass = "mr-5 border-b-2 py-1 px-1";
   return (
-    <div className="NavBar w-full h-12 px-2 box-border flex flex-shrink-0 items-center bg-violet-700 text-gray-50 text-base leading-6">
+    <div className="NavBar w-full h-14 px-2 box-border flex flex-shrink-0 items-center bg-violet-700 text-gray-50 text-lg leading-6 pt-">
       <Link to={"/"} className={linkClass}>
         <p>Home</p>
       </Link>

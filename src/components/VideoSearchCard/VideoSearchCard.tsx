@@ -2,7 +2,6 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   resetSelectedNote,
-  setSelectedNote,
   setSelectedNoteVideo,
 } from "../../redux/reducers/notes/notesReducer";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +18,7 @@ function VideoSearchCard({ video }: VideoSearchCardProps) {
   const selectedNote = useAppSelector((state) => state.notes.selectedNote);
   return (
     <div
-      className="VideoSearchCar w-full cursor-pointer mb-3 bg-yellow-400 rounded-lg py-2 px-3 flex flex-col sm:flex-row"
+      className="VideoSearchCar w-full cursor-pointer mb-3 bg-yellow-400 rounded-lg py-2 px-3 flex flex-col sm:flex-row shadow-md shadow-gray-500"
       onClick={() => {
         if (userInfo.id + video.id.videoId !== selectedNote.noteData.id) {
           dispatch(resetSelectedNote());

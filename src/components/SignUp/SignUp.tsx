@@ -25,7 +25,7 @@ function SignUp() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   return (
-    <div className="SignUp w-full h-full flex flex-col justify-center">
+    <div className="SignUp w-full max-w-[400px] h-full flex flex-col justify-center">
       <h1 className="text-4xl text-center font-bold">SignUp</h1>
       <form className="flex flex-col">
         <label htmlFor="">Email</label>
@@ -63,7 +63,7 @@ function SignUp() {
 
         <RadioButtons
           label="Can people see your profile"
-          onChange={(value: string) => setSearchable(value == "Yes")}
+          onChange={(value: string) => setSearchable(value === "Yes")}
           values={["Yes", "No"]}
           selectedValue={searchable ? "Yes" : "No"}
         />
