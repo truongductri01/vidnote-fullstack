@@ -34,9 +34,10 @@ function NoteCard({ noteData }: { noteData: NoteData }) {
         src={noteData.video.url as any}
         alt=""
       />
-      <p className="flex-grow font-bold text-ellipsis overflow-hidden whitespace-nowrap sm:ml-2 sm:whitespace-normal">
-        {noteData.video.title}
-      </p>
+      <p
+        className="flex-grow font-bold text-ellipsis overflow-hidden whitespace-nowrap sm:ml-2 sm:whitespace-normal"
+        dangerouslySetInnerHTML={{ __html: noteData.video.title as string }}
+      ></p>
     </div>
   );
 }

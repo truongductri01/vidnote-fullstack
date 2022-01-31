@@ -29,7 +29,10 @@ function NoteVideo({ video }: { video: YouTubeVideoSearchResult }) {
           ></iframe>
         )}
         <div className="content h-full w-full sm:ml-2 flex flex-col">
-          <p className="text-base">{(video as any).snippet.title}</p>
+          <p
+            className="text-base"
+            dangerouslySetInnerHTML={{ __html: (video as any).snippet.title }}
+          ></p>
           <p className="text-sm text-gray-500">
             {(video as any).snippet.channelTitle}
           </p>

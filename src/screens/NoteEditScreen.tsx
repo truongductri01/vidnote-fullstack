@@ -69,28 +69,22 @@ function NoteEditScreen() {
   }, []);
 
   useEffect(() => {
-    if (
-      selectedNote.noteData.id &&
-      selectedNote.noteData.videoId &&
-      !selectedNote.video
-    ) {
-      if (!selectedNote.video || (selectedNote.video as any)?.id !== videoId) {
-        dispatch(setLoader(true));
-        fetchYoutubeVideoByIdBackend(selectedNote.noteData.videoId)
-          .then((videoData) => {
-            dispatch(
-              setSelectedNote({
-                noteData: { ...selectedNote.noteData },
-                video: { ...videoData },
-              })
-            );
-            dispatch(setLoader(false));
-          })
-          .catch((e) => {
-            dispatch(setLoader(false));
-            alert("Error while fetching youtube video" + e);
-          });
-      }
+    if (!selectedNote.video || (selectedNote.video as any)?.id !== videoId) {
+      dispatch(setLoader(true));
+      fetchYoutubeVideoByIdBackend(videoId as string)
+        .then((videoData) => {
+          dispatch(
+            setSelectedNote({
+              noteData: { ...selectedNote.noteData },
+              video: { ...videoData },
+            })
+          );
+          dispatch(setLoader(false));
+        })
+        .catch((e) => {
+          dispatch(setLoader(false));
+          alert("Error while fetching youtube video" + e);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNote.noteData.id]);

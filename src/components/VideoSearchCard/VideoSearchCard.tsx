@@ -33,7 +33,10 @@ function VideoSearchCard({ video }: VideoSearchCardProps) {
         );
       }}
     >
-      <p className="font-bold sm:order-last sm:ml-2">{video.snippet.title}</p>
+      <p
+        className="font-bold sm:order-last sm:ml-2"
+        dangerouslySetInnerHTML={{ __html: video.snippet.title }}
+      ></p>
       <img
         src={video.snippet.thumbnails.medium.url}
         alt=""
