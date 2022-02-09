@@ -5,8 +5,8 @@ function NoteVideo({ video }: { video: YouTubeVideoSearchResult }) {
   const [isVideoFormat, setIsVideoFormat] = useState(false);
 
   return (
-    <div className="NoteVideo box-border flex-shrink-0 flex flex-col items-center mb-2 w-full lg:w-[300px] lg:px-5">
-      <div className="flex flex-col items-center justify-between sm:flex-row lg:flex-col">
+    <div className="NoteVideo box-border flex-shrink-0 flex flex-col items-center mb-2 w-full lg:w-[400px] xl:w-[500px] lg:px-3">
+      <div className="flex flex-col w-full items-center justify-between sm:flex-row lg:flex-col">
         {!isVideoFormat && (
           <img
             alt=""
@@ -18,10 +18,10 @@ function NoteVideo({ video }: { video: YouTubeVideoSearchResult }) {
         )}
         {isVideoFormat && (
           <iframe
-            className="w-full flex-grow h-max sm:h-[180px]"
+            className="w-full flex-grow h-max sm:h-[180px] lg:h-[240px] xl:h-[300px]"
             src={`https://www.youtube.com/embed/${
               (video as YouTubeVideoSearchResult)?.id?.videoId || video?.id
-            }`}
+            }?autoplay=1`}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
