@@ -11,6 +11,7 @@ import { getUserInfoBackend, isValidIdToken } from "./apis/authApis";
 import { setLoader } from "./redux/reducers/loader/loaderReducer";
 import Toast from "./designComponents/Toast/Toast";
 import { logOutAndClearData } from "./helpers/logout";
+import { setToast } from "./redux/reducers/toast/toastReducer";
 
 function App() {
   const isLoading = useAppSelector((state) => state.loader.isLoading);
@@ -40,21 +41,33 @@ function App() {
         .then((isValid) => {
           if (isValid) {
             if (!userInfo.id) {
-              getUserInfoBackend().then((userInfo) => {
-                dispatch(setUserInfo(userInfo));
-                dispatch(setLoader(false));
-                if (redirectInfo.hasRedirect) {
-                  navigate(
-                    "/notes/" +
-                      userInfo.id +
-                      redirectInfo.property.videoId +
-                      "?videoId=" +
-                      redirectInfo.property.videoId
+              getUserInfoBackend()
+                .then((userInfo) => {
+                  if (redirectInfo.hasRedirect) {
+                    navigate(
+                      "/notes/" +
+                        userInfo.id +
+                        redirectInfo.property.videoId +
+                        "?videoId=" +
+                        redirectInfo.property.videoId
+                    );
+                  }
+                  dispatch(setUserInfo(userInfo));
+                  dispatch(setLoader(false));
+                })
+                .catch((e) => {
+                  dispatch(
+                    setToast({
+                      hasToast: true,
+                      type: "success",
+                      message: "Note is saved",
+                    })
                   );
-                }
-              });
+                  dispatch(setLoader(false));
+                });
+            } else {
+              dispatch(setLoader(false));
             }
-            dispatch(setLoader(false));
           } else {
             logOutAndClearData(dispatch)
               .then(() => {
