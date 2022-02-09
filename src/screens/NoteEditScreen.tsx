@@ -93,12 +93,8 @@ function NoteEditScreen() {
     <div className="NoteEditScreen w-full flex-grow flex flex-col items-start overflow-y-auto lg:flex-row">
       {selectedNote.video && <NoteVideo video={selectedNote.video} />}
       <div className="flex-grow w-full flex flex-col overflow-y-auto lg:h-full">
-        <DraftEditor
-          editorState={editorState}
-          setEditorState={setEditorState}
-        />
         <button
-          className="min-w-10 w-full h-max p-2 bg-violet-800 text-gray-100 mt-2 rounded-lg"
+          className="min-w-10 w-full h-max p-2 bg-violet-800 text-gray-100 mb-2 rounded-lg"
           onClick={() => {
             dispatch(setLoader(true));
             const newData = {
@@ -156,15 +152,23 @@ function NoteEditScreen() {
                       })
                     );
                   }
+                  dispatch(
+                    setToast({
+                      hasToast: true,
+                      type: "success",
+                      message: "Note is saved",
+                    })
+                  );
+                } else {
+                  dispatch(
+                    setToast({
+                      hasToast: true,
+                      type: "error",
+                      message: "Something wrong happens",
+                    })
+                  );
                 }
                 dispatch(setLoader(false));
-                dispatch(
-                  setToast({
-                    hasToast: true,
-                    type: "success",
-                    message: "Note is saved",
-                  })
-                );
               })
               .catch((e) => {
                 dispatch(setLoader(false));
@@ -180,6 +184,10 @@ function NoteEditScreen() {
         >
           Save
         </button>
+        <DraftEditor
+          editorState={editorState}
+          setEditorState={setEditorState}
+        />
       </div>
     </div>
   );

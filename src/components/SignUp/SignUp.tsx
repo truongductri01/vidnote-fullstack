@@ -68,23 +68,20 @@ function SignUp() {
           selectedValue={searchable ? "Yes" : "No"}
         />
 
-        <label htmlFor="">Your avatar Url</label>
+        {/* <label htmlFor="">Your avatar Url</label>
         <input
           type="text"
           className={inputStyle}
           onChange={(e) => setAvatarUrl(e.target.value)}
-        />
+        /> */}
       </form>
 
       <div className="flex flex-col">
         <button
           disabled={
-            password === confirmPassword &&
-            password &&
-            firstName &&
-            lastName &&
-            avatarUrl
-              ? false
+            password === confirmPassword && password && firstName && lastName
+              ? // && avatarUrl
+                false
               : true
           }
           onClick={(e) => {

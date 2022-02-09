@@ -13,6 +13,7 @@ import AuthScreen from "./screens/AuthScreen";
 import LogIn from "./components/Login/LogIn";
 import SignUp from "./components/SignUp/SignUp";
 import NotesContainer from "./components/NotesContainer/NotesContainer";
+import CheckList from "./screens/CheckList";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -23,6 +24,7 @@ ReactDOM.render(
             <Route path="login" element={<LogIn />}></Route>
             <Route path="signup" element={<SignUp />}></Route>
           </Route>
+          <Route path="checklist" element={<CheckList />}></Route>
           <Route path="/" element={<App />}>
             <Route index element={<SearchScreen />}></Route>
             <Route path="notes" element={<NotesScreen />}>
