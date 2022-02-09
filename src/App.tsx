@@ -17,6 +17,7 @@ function App() {
   const idToken = getIdTokenLocalStorage();
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const toastInfo = useAppSelector((state) => state.toast.toastInfo);
+  const redirectInfo = useAppSelector((state) => state.redirect);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [appHeight, setAppHeight] = useState(window.innerHeight);
@@ -42,6 +43,15 @@ function App() {
               getUserInfoBackend().then((userInfo) => {
                 dispatch(setUserInfo(userInfo));
                 dispatch(setLoader(false));
+                if (redirectInfo.hasRedirect) {
+                  navigate(
+                    "/notes/" +
+                      userInfo.id +
+                      redirectInfo.property.videoId +
+                      "?videoId=" +
+                      redirectInfo.property.videoId
+                  );
+                }
               });
             }
             dispatch(setLoader(false));

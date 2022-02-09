@@ -14,6 +14,7 @@ import LogIn from "./components/Login/LogIn";
 import SignUp from "./components/SignUp/SignUp";
 import NotesContainer from "./components/NotesContainer/NotesContainer";
 import CheckList from "./screens/CheckList";
+import RedirectScreen from "./screens/RedirectScreen";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,6 +26,7 @@ ReactDOM.render(
             <Route path="signup" element={<SignUp />}></Route>
           </Route>
           <Route path="checklist" element={<CheckList />}></Route>
+          <Route path="/redirect" element={<RedirectScreen />}></Route>
           <Route path="/" element={<App />}>
             <Route index element={<SearchScreen />}></Route>
             <Route path="notes" element={<NotesScreen />}>

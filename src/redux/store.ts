@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loaderReducer from "./reducers/loader/loaderReducer";
 import notesReducer from "./reducers/notes/notesReducer";
+import redirectReducer from "./reducers/redirect/redirectReducer";
 import toastReducer from "./reducers/toast/toastReducer";
 import userReducer from "./reducers/user/userReducer";
 
@@ -10,6 +11,7 @@ const store = configureStore({
     notes: notesReducer,
     user: userReducer,
     toast: toastReducer,
+    redirect: redirectReducer,
   },
 });
 
