@@ -107,7 +107,7 @@ function SignUp() {
             }
           }}
           className={
-            primaryButtonStyleClassName +
+            primaryButtonStyleClassName.default +
             " disabled:cursor-default disabled:bg-gray-400"
           }
         >

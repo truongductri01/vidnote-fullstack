@@ -30,7 +30,7 @@ function NavBar() {
             });
           }}
         >
-          Logout
+          Sign out
         </button>
       ) : (
         <button

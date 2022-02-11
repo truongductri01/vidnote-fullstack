@@ -222,7 +222,7 @@ function NoteEditScreen() {
               </p>
               <button
                 onClick={() => changeNoteStatus("public")}
-                className={primaryButtonStyleClassName}
+                className={primaryButtonStyleClassName.default}
               >
                 Make Note Public
               </button>
@@ -250,7 +250,7 @@ function NoteEditScreen() {
                 Copy link to Share
               </button>
               <button
-                className={primaryButtonStyleClassName}
+                className={primaryButtonStyleClassName.default}
                 onClick={() => changeNoteStatus("private")}
               >
                 Make Note Private
@@ -274,7 +274,7 @@ function NoteEditScreen() {
             </button>
           )}
           <button
-            className={primaryButtonStyleClassName + " w-[100px] py-1"}
+            className={primaryButtonStyleClassName.small + " w-[100px]"}
             onClick={onSaveButtonClick}
           >
             Save

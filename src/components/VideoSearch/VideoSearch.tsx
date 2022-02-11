@@ -43,7 +43,7 @@ function VideoSearch(props: any) {
           placeholder="Search..."
         />
         <button
-          className={primaryButtonStyleClassName + " ml-2"}
+          className={primaryButtonStyleClassName.default + " ml-2"}
           onClick={(e) => {
             e.preventDefault();
             handleSubmit();

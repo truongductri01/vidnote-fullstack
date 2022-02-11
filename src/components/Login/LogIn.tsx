@@ -57,7 +57,7 @@ function LogIn() {
             e.preventDefault();
             handleLogInSubmit();
           }}
-          className={primaryButtonStyleClassName}
+          className={primaryButtonStyleClassName.default}
         >
           Login
         </button>
