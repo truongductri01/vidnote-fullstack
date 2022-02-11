@@ -9,7 +9,7 @@ export default function DraftEditor(props: any) {
       editorState={props.editorState}
       onChange={props.setEditorState}
       placeholder="Enter your note ..."
-      // readOnly
+      readOnly={props.readOnly}
     />
   );
 }

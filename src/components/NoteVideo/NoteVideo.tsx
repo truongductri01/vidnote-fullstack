@@ -33,15 +33,17 @@ function NoteVideo({ video }: { video: YouTubeVideoSearchResult }) {
             className="text-base"
             dangerouslySetInnerHTML={{ __html: (video as any).snippet.title }}
           ></p>
-          <p className="text-sm text-gray-500">
-            {(video as any).snippet.channelTitle}
-          </p>
-          <button
-            className="h-max w-max p-1 px-2 rounded-md bg-yellow-400 mt-2 sm:mt-auto"
-            onClick={() => setIsVideoFormat(!isVideoFormat)}
-          >
-            {isVideoFormat ? "Close Video" : "Watch Video"}
-          </button>
+          <div className="flex items-center mt-1">
+            <p className="text-sm text-gray-500">
+              {(video as any).snippet.channelTitle}
+            </p>
+            <button
+              className="h-max w-max px-2 py-1 ml-2 rounded-md bg-yellow-400 sm:mt-auto text-sm"
+              onClick={() => setIsVideoFormat(!isVideoFormat)}
+            >
+              {isVideoFormat ? "Close Video" : "Watch Video"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

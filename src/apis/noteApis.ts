@@ -7,8 +7,12 @@ export const noteRoutes = {
   getSingle: (noteId: string) => {
     return apiURL + "/notes?id=" + noteId;
   },
+  getSinglePublic: (noteId: string) => {
+    return apiURL + "/notes/public?id=" + noteId;
+  },
   postPutSetSingle: apiURL + "/notes/set-note",
   putUpdateSingle: apiURL + "/notes/update-note",
+  putSingleStatus: apiURL + "/notes/note-state",
 };
 const getAllNotesBackend = async () => {
   let idToken = getIdTokenLocalStorage();
@@ -62,4 +66,34 @@ const setNoteBackend = async (noteData: NoteData) => {
   }
   return false;
 };
-export { getAllNotesBackend, getNoteById, setNoteBackend };
+const updateNoteStatus = async (
+  noteId: string | null | undefined,
+  newStatus: "public" | "private",
+  authorId: string
+) => {
+  return await fetch(baseURL + noteRoutes.putSingleStatus, {
+    method: "PUT",
+    headers: {
+      Authorization: "Bearer " + getIdTokenLocalStorage(),
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      noteId,
+      newStatus,
+      authorId,
+    }),
+  });
+};
+const getPublicNoteById = async (noteId: string) => {
+  let data = await fetch(baseURL + noteRoutes.getSinglePublic(noteId))
+    .then((res) => res.json())
+    .then((noteData) => noteData);
+  return data;
+};
+export {
+  getAllNotesBackend,
+  getNoteById,
+  setNoteBackend,
+  updateNoteStatus,
+  getPublicNoteById,
+};
