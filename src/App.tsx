@@ -11,7 +11,7 @@ import { getUserInfoBackend, isValidIdToken } from "./apis/authApis";
 import { setLoader } from "./redux/reducers/loader/loaderReducer";
 import Toast from "./designComponents/Toast/Toast";
 import { logOutAndClearData } from "./helpers/logout";
-import { setToast } from "./redux/reducers/toast/toastReducer";
+import { setToastError } from "./redux/reducers/toast/toastReducer";
 
 function App() {
   const isLoading = useAppSelector((state) => state.loader.isLoading);
@@ -56,13 +56,7 @@ function App() {
                   dispatch(setLoader(false));
                 })
                 .catch((e) => {
-                  dispatch(
-                    setToast({
-                      hasToast: true,
-                      type: "success",
-                      message: "Note is saved",
-                    })
-                  );
+                  dispatch(setToastError("" + e));
                   dispatch(setLoader(false));
                 });
             } else {
@@ -75,14 +69,14 @@ function App() {
                 dispatch(setLoader(false));
               })
               .catch((e) => {
-                alert("Error while logging out" + e);
+                dispatch(setToastError("" + e));
                 dispatch(setLoader(false));
               });
           }
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert(e);
+          dispatch(setToastError("" + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

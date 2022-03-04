@@ -16,21 +16,23 @@ const userReducer = createSlice({
   name: "user",
   initialState,
   reducers: {
+    removeUserInfo(state) {
+      state.userInfo = { ...initialState.userInfo };
+    },
+    removeNoteIdFromUser(state, actions: PayloadAction<string>) {
+      let newNotesId: string[] = [];
+      const noteId = actions.payload;
+      state.userInfo.notesId.forEach((id) => {
+        id !== noteId && newNotesId.push(id);
+      });
+      state.userInfo = { ...state.userInfo, notesId: [...newNotesId] };
+    },
     setUserInfo(state, actions: PayloadAction<any>) {
       state.userInfo = actions.payload;
-    },
-    removeUserInfo(state) {
-      state.userInfo = {
-        id: "",
-        firstName: "",
-        lastName: "",
-        searchable: true,
-        avatarUrl: "",
-        notesId: [],
-      };
     },
   },
 });
 
-export const { setUserInfo, removeUserInfo } = userReducer.actions;
+export const { removeUserInfo, removeNoteIdFromUser, setUserInfo } =
+  userReducer.actions;
 export default userReducer.reducer;

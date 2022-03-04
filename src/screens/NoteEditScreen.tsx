@@ -19,8 +19,14 @@ import {
 } from "../apis/noteApis";
 import { NoteData } from "../types/noteFetchingDataType";
 import { fetchYoutubeVideoByIdBackend } from "../apis/youtubeApis";
-import { setUserInfo } from "../redux/reducers/user/userReducer";
-import { setToast } from "../redux/reducers/toast/toastReducer";
+import {
+  removeNoteIdFromUser,
+  setUserInfo,
+} from "../redux/reducers/user/userReducer";
+import {
+  setToastError,
+  setToastSuccess,
+} from "../redux/reducers/toast/toastReducer";
 import {
   primaryButtonStyleClassName,
   secondaryButtonStyleClassName,
@@ -162,33 +168,15 @@ function NoteEditScreen() {
               })
             );
           }
-          dispatch(
-            setToast({
-              hasToast: true,
-              type: "success",
-              message: "Note is saved",
-            })
-          );
+          dispatch(setToastSuccess("Note is saved"));
         } else {
-          dispatch(
-            setToast({
-              hasToast: true,
-              type: "error",
-              message: "Something wrong happens",
-            })
-          );
+          dispatch(setToastError("Something wrong happens"));
         }
         dispatch(setLoader(false));
       })
       .catch((e) => {
         dispatch(setLoader(false));
-        dispatch(
-          setToast({
-            hasToast: true,
-            type: "error",
-            message: "" + e,
-          })
-        );
+        dispatch(setToastError("" + e));
       });
   };
   const onShareButtonClick = () => {
@@ -228,44 +216,21 @@ function NoteEditScreen() {
         .then((res) => {
           dispatch(setLoader(false));
           if (res.ok) {
-            dispatch(
-              setToast({
-                type: "success",
-                message: "Note Deleted",
-                hasToast: true,
-              })
-            );
+            dispatch(setToastSuccess("Note Deleted"));
             dispatch(removeNoteById(noteId));
+            dispatch(removeNoteIdFromUser(noteId));
             navigate("/notes");
           } else {
-            dispatch(
-              setToast({
-                type: "error",
-                message: "Something wrong, try again",
-                hasToast: true,
-              })
-            );
+            dispatch(setToastError("Something wrong happens, try again!"));
           }
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          dispatch(
-            setToast({
-              type: "error",
-              message: `${e}`,
-              hasToast: true,
-            })
-          );
+          dispatch(setToastError("" + e));
         });
     } else {
       dispatch(setLoader(false));
-      dispatch(
-        setToast({
-          type: "error",
-          message: "Invalid Note",
-          hasToast: true,
-        })
-      );
+      dispatch(setToastError("Invalid Note"));
     }
   };
 
@@ -296,13 +261,7 @@ function NoteEditScreen() {
                 className={secondaryButtonStyleClassName.default + " mb-3"}
                 onClick={() => {
                   navigator.clipboard.writeText(publicViewLink);
-                  dispatch(
-                    setToast({
-                      type: "success",
-                      message: "Copied Link",
-                      hasToast: true,
-                    })
-                  );
+                  dispatch(setToastSuccess("Link is copied"));
                 }}
               >
                 Copy link to Share
