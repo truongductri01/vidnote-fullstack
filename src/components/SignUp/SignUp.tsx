@@ -11,6 +11,7 @@ import {
 } from "../../styles/buttonStyles";
 import RadioButtons from "../../designComponents/RadioButtons/RadioButtons";
 import { NewUserSignUp } from "../../types/userTypes";
+import { setToastError } from "../../redux/reducers/toast/toastReducer";
 
 const inputStyle = primaryInputStyleClassName + " mb-2";
 
@@ -102,7 +103,7 @@ function SignUp() {
                 })
                 .catch((e) => {
                   dispatch(setLoader(false));
-                  alert(e);
+                  dispatch(setToastError("" + e));
                 });
             }
           }}

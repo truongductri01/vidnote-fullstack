@@ -8,7 +8,7 @@ import { stringDelimeter } from "../constants";
 import NoteVideo from "../components/NoteVideo/NoteVideo";
 import { getPublicNoteById } from "../apis/noteApis";
 import { fetchYoutubeVideoByIdBackend } from "../apis/youtubeApis";
-import { setToast } from "../redux/reducers/toast/toastReducer";
+import { setToastError } from "../redux/reducers/toast/toastReducer";
 import NavBar from "../components/NavBar/NavBar";
 function ViewNoteScreen() {
   const [searchParams] = useSearchParams();
@@ -50,13 +50,7 @@ function ViewNoteScreen() {
           dispatch(setLoader(false));
         })
         .catch((e) => {
-          dispatch(
-            setToast({
-              type: "error",
-              message: "" + e,
-              hasToast: true,
-            })
-          );
+          dispatch(setToastError("" + e));
           dispatch(setLoader(false));
         });
     } else {
@@ -74,7 +68,7 @@ function ViewNoteScreen() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert("Error while fetching youtube video" + e);
+          dispatch(setToastError("Error while fetching youtube video" + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

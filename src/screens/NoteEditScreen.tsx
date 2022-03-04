@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DraftEditor from "../components/DraftEditor/DraftEditor";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { EditorState, ContentState } from "draft-js";
 import {
+  removeNoteById,
   setNotes,
   setSelectedNote,
 } from "../redux/reducers/notes/notesReducer";
@@ -11,14 +12,21 @@ import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { stringDelimeter } from "../constants";
 import NoteVideo from "../components/NoteVideo/NoteVideo";
 import {
+  deleteNoteById,
   getNoteById,
   setNoteBackend,
   updateNoteStatus,
 } from "../apis/noteApis";
 import { NoteData } from "../types/noteFetchingDataType";
 import { fetchYoutubeVideoByIdBackend } from "../apis/youtubeApis";
-import { setUserInfo } from "../redux/reducers/user/userReducer";
-import { setToast } from "../redux/reducers/toast/toastReducer";
+import {
+  removeNoteIdFromUser,
+  setUserInfo,
+} from "../redux/reducers/user/userReducer";
+import {
+  setToastError,
+  setToastSuccess,
+} from "../redux/reducers/toast/toastReducer";
 import {
   primaryButtonStyleClassName,
   secondaryButtonStyleClassName,
@@ -41,7 +49,15 @@ function NoteEditScreen() {
   );
   const [data, setData] = useState(selectedNote);
   const [shareNote, setShareNote] = useState(false);
+  const [noteInNotes, setNoteInNotes] = useState(false);
   const publicViewLink = `${clientBaseUrl}/view/${noteId}?videoId=${videoId}`;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (notes.some((note) => note.id === noteId)) {
+      setNoteInNotes(true);
+    }
+  }, [notes, noteId]);
 
   useEffect(() => {
     setData(selectedNote);
@@ -74,7 +90,7 @@ function NoteEditScreen() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert("Error in note edit screen " + e);
+          dispatch(setToastError("Error in note edit screen " + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +111,7 @@ function NoteEditScreen() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert("Error while fetching youtube video" + e);
+          dispatch(setToastError("Error while fetching youtube video" + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,33 +168,15 @@ function NoteEditScreen() {
               })
             );
           }
-          dispatch(
-            setToast({
-              hasToast: true,
-              type: "success",
-              message: "Note is saved",
-            })
-          );
+          dispatch(setToastSuccess("Note is saved"));
         } else {
-          dispatch(
-            setToast({
-              hasToast: true,
-              type: "error",
-              message: "Something wrong happens",
-            })
-          );
+          dispatch(setToastError("Something wrong happens"));
         }
         dispatch(setLoader(false));
       })
       .catch((e) => {
         dispatch(setLoader(false));
-        dispatch(
-          setToast({
-            hasToast: true,
-            type: "error",
-            message: "" + e,
-          })
-        );
+        dispatch(setToastError("" + e));
       });
   };
   const onShareButtonClick = () => {
@@ -211,6 +209,31 @@ function NoteEditScreen() {
       });
   };
 
+  const deleteNoteFromId = () => {
+    dispatch(setLoader(true));
+    if (noteId) {
+      deleteNoteById(noteId)
+        .then((res) => {
+          dispatch(setLoader(false));
+          if (res.ok) {
+            dispatch(setToastSuccess("Note Deleted"));
+            dispatch(removeNoteById(noteId));
+            dispatch(removeNoteIdFromUser(noteId));
+            navigate("/notes");
+          } else {
+            dispatch(setToastError("Something wrong happens, try again!"));
+          }
+        })
+        .catch((e) => {
+          dispatch(setLoader(false));
+          dispatch(setToastError("" + e));
+        });
+    } else {
+      dispatch(setLoader(false));
+      dispatch(setToastError("Invalid Note"));
+    }
+  };
+
   return (
     <div className="NoteEditScreen w-full flex-grow flex flex-col items-start overflow-y-auto lg:flex-row">
       {shareNote && (
@@ -238,13 +261,7 @@ function NoteEditScreen() {
                 className={secondaryButtonStyleClassName.default + " mb-3"}
                 onClick={() => {
                   navigator.clipboard.writeText(publicViewLink);
-                  dispatch(
-                    setToast({
-                      type: "success",
-                      message: "Copied Link",
-                      hasToast: true,
-                    })
-                  );
+                  dispatch(setToastSuccess("Link is copied"));
                 }}
               >
                 Copy link to Share
@@ -262,17 +279,26 @@ function NoteEditScreen() {
       {selectedNote.video && <NoteVideo video={selectedNote.video} />}
       <div className="flex-grow w-full flex flex-col overflow-y-auto lg:h-full">
         <div className="Buttons flex mb-2 justify-between sm:justify-end">
-          {selectedNote.noteData.id && (
-            <button
-              className={
-                secondaryButtonStyleClassName.small +
-                " w-[140px] text-sm sm:mr-5"
-              }
-              onClick={onShareButtonClick}
-            >
-              Share this Note
-            </button>
+          {noteId && noteInNotes && (
+            <>
+              <button
+                className={
+                  secondaryButtonStyleClassName.small +
+                  " w-[140px] text-sm sm:mr-5"
+                }
+                onClick={onShareButtonClick}
+              >
+                Share this Note
+              </button>
+              <button
+                className={primaryButtonStyleClassName.small + " w-[100px]"}
+                onClick={deleteNoteFromId}
+              >
+                Delete
+              </button>
+            </>
           )}
+
           <button
             className={primaryButtonStyleClassName.small + " w-[100px]"}
             onClick={onSaveButtonClick}

@@ -8,6 +8,7 @@ import {
   primaryButtonStyleClassName,
   secondaryButtonStyleClassName,
 } from "../../styles/buttonStyles";
+import { setToastError } from "../../redux/reducers/toast/toastReducer";
 
 function LogIn() {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ function LogIn() {
       })
       .catch((e) => {
         dispatch(setLoader(false));
-        alert(e);
+        dispatch(setToastError("" + e));
       });
   };
 

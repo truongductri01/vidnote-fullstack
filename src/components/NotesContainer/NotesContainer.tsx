@@ -3,6 +3,7 @@ import { getAllNotesBackend } from "../../apis/noteApis";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setLoader } from "../../redux/reducers/loader/loaderReducer";
 import { setNotes } from "../../redux/reducers/notes/notesReducer";
+import { setToastError } from "../../redux/reducers/toast/toastReducer";
 import { NoteData } from "../../types/noteFetchingDataType";
 import NoteCard from "../NoteCard/NoteCard";
 
@@ -20,7 +21,7 @@ function NotesContainer() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert(e);
+          dispatch(setToastError("" + e));
         });
     }
   }, [userInfo]);

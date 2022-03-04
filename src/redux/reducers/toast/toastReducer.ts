@@ -22,8 +22,26 @@ export const toastSlice = createSlice({
   name: "toast",
   initialState,
   reducers: {
-    setToast: (state, actions) => {
-      state.toastInfo = actions.payload;
+    setToastSuccess: (state, actions: { payload: string; type: string }) => {
+      state.toastInfo = {
+        hasToast: true,
+        type: "success",
+        message: actions.payload,
+      };
+    },
+    setToastError: (state, actions: { payload: string; type: string }) => {
+      state.toastInfo = {
+        hasToast: true,
+        type: "error",
+        message: actions.payload,
+      };
+    },
+    setToastInfo: (state, actions: { payload: string; type: string }) => {
+      state.toastInfo = {
+        hasToast: true,
+        type: "info",
+        message: actions.payload,
+      };
     },
     resetToast: (state) => {
       state.toastInfo = {
@@ -35,5 +53,6 @@ export const toastSlice = createSlice({
   },
 });
 
-export const { setToast, resetToast } = toastSlice.actions;
+export const { resetToast, setToastSuccess, setToastError, setToastInfo } =
+  toastSlice.actions;
 export default toastSlice.reducer;

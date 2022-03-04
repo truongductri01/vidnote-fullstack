@@ -3,6 +3,7 @@ import { fetchYoutubeBackend } from "../../apis/youtubeApis";
 import { defaultSearchResultLength } from "../../constants";
 import { useAppDispatch } from "../../redux/hooks";
 import { setLoader } from "../../redux/reducers/loader/loaderReducer";
+import { setToastError } from "../../redux/reducers/toast/toastReducer";
 import { primaryButtonStyleClassName } from "../../styles/buttonStyles";
 import { primaryInputStyleClassName } from "../../styles/inputStyles";
 import { YouTubeVideoSearchResult } from "../../types/youtubeResponseType";
@@ -22,7 +23,7 @@ function VideoSearch(props: any) {
       })
       .catch((err: any) => {
         dispatch(setLoader(false));
-        alert(err);
+        dispatch(setToastError("" + err));
       });
   };
 
