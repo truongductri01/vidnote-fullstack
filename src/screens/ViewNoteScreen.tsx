@@ -68,7 +68,7 @@ function ViewNoteScreen() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert("Error while fetching youtube video" + e);
+          dispatch(setToastError("Error while fetching youtube video" + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

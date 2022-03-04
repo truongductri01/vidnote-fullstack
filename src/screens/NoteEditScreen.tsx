@@ -90,7 +90,7 @@ function NoteEditScreen() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert("Error in note edit screen " + e);
+          dispatch(setToastError("Error in note edit screen " + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +111,7 @@ function NoteEditScreen() {
         })
         .catch((e) => {
           dispatch(setLoader(false));
-          alert("Error while fetching youtube video" + e);
+          dispatch(setToastError("Error while fetching youtube video" + e));
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
