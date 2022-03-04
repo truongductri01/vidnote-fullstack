@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DraftEditor from "../components/DraftEditor/DraftEditor";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { EditorState, ContentState } from "draft-js";
 import {
+  removeNoteById,
   setNotes,
   setSelectedNote,
 } from "../redux/reducers/notes/notesReducer";
@@ -11,6 +12,7 @@ import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { stringDelimeter } from "../constants";
 import NoteVideo from "../components/NoteVideo/NoteVideo";
 import {
+  deleteNoteById,
   getNoteById,
   setNoteBackend,
   updateNoteStatus,
@@ -41,7 +43,15 @@ function NoteEditScreen() {
   );
   const [data, setData] = useState(selectedNote);
   const [shareNote, setShareNote] = useState(false);
+  const [noteInNotes, setNoteInNotes] = useState(false);
   const publicViewLink = `${clientBaseUrl}/view/${noteId}?videoId=${videoId}`;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (notes.some((note) => note.id === noteId)) {
+      setNoteInNotes(true);
+    }
+  }, [notes, noteId]);
 
   useEffect(() => {
     setData(selectedNote);
@@ -211,6 +221,54 @@ function NoteEditScreen() {
       });
   };
 
+  const deleteNoteFromId = () => {
+    dispatch(setLoader(true));
+    if (noteId) {
+      deleteNoteById(noteId)
+        .then((res) => {
+          dispatch(setLoader(false));
+          if (res.ok) {
+            dispatch(
+              setToast({
+                type: "success",
+                message: "Note Deleted",
+                hasToast: true,
+              })
+            );
+            dispatch(removeNoteById(noteId));
+            navigate("/notes");
+          } else {
+            dispatch(
+              setToast({
+                type: "error",
+                message: "Something wrong, try again",
+                hasToast: true,
+              })
+            );
+          }
+        })
+        .catch((e) => {
+          dispatch(setLoader(false));
+          dispatch(
+            setToast({
+              type: "error",
+              message: `${e}`,
+              hasToast: true,
+            })
+          );
+        });
+    } else {
+      dispatch(setLoader(false));
+      dispatch(
+        setToast({
+          type: "error",
+          message: "Invalid Note",
+          hasToast: true,
+        })
+      );
+    }
+  };
+
   return (
     <div className="NoteEditScreen w-full flex-grow flex flex-col items-start overflow-y-auto lg:flex-row">
       {shareNote && (
@@ -262,17 +320,26 @@ function NoteEditScreen() {
       {selectedNote.video && <NoteVideo video={selectedNote.video} />}
       <div className="flex-grow w-full flex flex-col overflow-y-auto lg:h-full">
         <div className="Buttons flex mb-2 justify-between sm:justify-end">
-          {selectedNote.noteData.id && (
-            <button
-              className={
-                secondaryButtonStyleClassName.small +
-                " w-[140px] text-sm sm:mr-5"
-              }
-              onClick={onShareButtonClick}
-            >
-              Share this Note
-            </button>
+          {noteId && noteInNotes && (
+            <>
+              <button
+                className={
+                  secondaryButtonStyleClassName.small +
+                  " w-[140px] text-sm sm:mr-5"
+                }
+                onClick={onShareButtonClick}
+              >
+                Share this Note
+              </button>
+              <button
+                className={primaryButtonStyleClassName.small + " w-[100px]"}
+                onClick={deleteNoteFromId}
+              >
+                Delete
+              </button>
+            </>
           )}
+
           <button
             className={primaryButtonStyleClassName.small + " w-[100px]"}
             onClick={onSaveButtonClick}

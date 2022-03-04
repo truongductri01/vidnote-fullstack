@@ -13,6 +13,7 @@ export const noteRoutes = {
   postPutSetSingle: apiURL + "/notes/set-note",
   putUpdateSingle: apiURL + "/notes/update-note",
   putSingleStatus: apiURL + "/notes/note-state",
+  deleteNote: (noteId: string) => apiURL + "/notes?id=" + noteId,
 };
 const getAllNotesBackend = async () => {
   let idToken = getIdTokenLocalStorage();
@@ -90,10 +91,21 @@ const getPublicNoteById = async (noteId: string) => {
     .then((noteData) => noteData);
   return data;
 };
+const deleteNoteById = async (noteId: string) => {
+  return fetch(baseURL + noteRoutes.deleteNote(noteId), {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + getIdTokenLocalStorage(),
+      "Content-type": "application/json",
+    },
+    body: "",
+  });
+};
 export {
   getAllNotesBackend,
   getNoteById,
   setNoteBackend,
   updateNoteStatus,
   getPublicNoteById,
+  deleteNoteById,
 };
