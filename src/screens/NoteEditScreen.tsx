@@ -279,13 +279,15 @@ function NoteEditScreen() {
       )}
       {openDeleteModal && (
         <Modal onClose={() => setOpenDeleteModal(false)}>
-          <h1>Are you sure to delete this Note?</h1>
-          <button
-            className={primaryButtonStyleClassName.default}
-            onClick={() => deleteNoteFromId(noteId)}
-          >
-            Delete
-          </button>
+          <div className="h-full flex flex-col items-center justify-center">
+            <h1>Are you sure to delete this Note?</h1>
+            <button
+              className={primaryButtonStyleClassName.default + " mt-5"}
+              onClick={() => deleteNoteFromId(noteId)}
+            >
+              Delete
+            </button>
+          </div>
         </Modal>
       )}
       {selectedNote.video && <NoteVideo video={selectedNote.video} />}
