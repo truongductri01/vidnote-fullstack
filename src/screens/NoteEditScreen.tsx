@@ -50,6 +50,7 @@ function NoteEditScreen() {
   const [data, setData] = useState(selectedNote);
   const [shareNote, setShareNote] = useState(false);
   const [noteInNotes, setNoteInNotes] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const publicViewLink = `${clientBaseUrl}/view/${noteId}?videoId=${videoId}`;
   const navigate = useNavigate();
 
@@ -209,7 +210,7 @@ function NoteEditScreen() {
       });
   };
 
-  const deleteNoteFromId = () => {
+  const deleteNoteFromId = (noteId: string | undefined) => {
     dispatch(setLoader(true));
     if (noteId) {
       deleteNoteById(noteId)
@@ -276,6 +277,17 @@ function NoteEditScreen() {
           )}
         </Modal>
       )}
+      {openDeleteModal && (
+        <Modal onClose={() => setOpenDeleteModal(false)}>
+          <h1>Are you sure to delete this Note?</h1>
+          <button
+            className={primaryButtonStyleClassName.default}
+            onClick={() => deleteNoteFromId(noteId)}
+          >
+            Delete
+          </button>
+        </Modal>
+      )}
       {selectedNote.video && <NoteVideo video={selectedNote.video} />}
       <div className="flex-grow w-full flex flex-col overflow-y-auto lg:h-full">
         <div className="Buttons flex mb-2 justify-between sm:justify-end">
@@ -292,7 +304,7 @@ function NoteEditScreen() {
               </button>
               <button
                 className={primaryButtonStyleClassName.small + " w-[100px]"}
-                onClick={deleteNoteFromId}
+                onClick={() => setOpenDeleteModal(true)}
               >
                 Delete
               </button>
