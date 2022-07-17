@@ -32,7 +32,7 @@ import {
   secondaryButtonStyleClassName,
 } from "../styles/buttonStyles";
 import Modal from "../components/Modal/Modal";
-import { clientBaseUrl } from "../apis/routes";
+import { config } from "../config/config";
 
 function NoteEditScreen() {
   const [searchParams] = useSearchParams();
@@ -52,7 +52,7 @@ function NoteEditScreen() {
   const [shareNote, setShareNote] = useState(false);
   const [noteInNotes, setNoteInNotes] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const publicViewLink = `${clientBaseUrl}/view/${noteId}?videoId=${videoId}`;
+  const publicViewLink = `${config.app.clientBaseURL}/view/${noteId}?videoId=${videoId}`;
   const navigate = useNavigate();
 
   useEffect(() => {
