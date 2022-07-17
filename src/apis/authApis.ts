@@ -1,4 +1,3 @@
-import { getIdTokenLocalStorage } from "../helpers/localStorageUtils";
 import { NewUserSignUp } from "../types/userTypes";
 import { baseURL, apiURL } from "./routes";
 const authBaseRoute = "/auth";
@@ -18,8 +17,7 @@ export async function isValidIdToken(idToken: string) {
   return isValid;
 }
 
-export async function getUserInfoBackend() {
-  let idToken = getIdTokenLocalStorage();
+export async function getUserInfoBackend(idToken: string) {
   if (idToken) {
     let userInfo = await fetch(baseURL + apiURL + authRoutes.getUserInfo, {
       headers: {
@@ -33,8 +31,10 @@ export async function getUserInfoBackend() {
   return null;
 }
 
-export async function createUserBackend(userData: NewUserSignUp) {
-  let idToken = getIdTokenLocalStorage();
+export async function createUserBackend(
+  userData: NewUserSignUp,
+  idToken: string
+) {
   if (idToken) {
     let user = await fetch(baseURL + apiURL + authRoutes.postCreateUser, {
       method: "POST",

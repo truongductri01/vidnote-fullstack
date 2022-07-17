@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./reducers/auth/authReducer";
 import loaderReducer from "./reducers/loader/loaderReducer";
 import notesReducer from "./reducers/notes/notesReducer";
 import redirectReducer from "./reducers/redirect/redirectReducer";
@@ -12,6 +13,7 @@ const store = configureStore({
     user: userReducer,
     toast: toastReducer,
     redirect: redirectReducer,
+    auth: authReducer,
   },
 });
 

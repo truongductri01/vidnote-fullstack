@@ -11,10 +11,11 @@ function NotesContainer() {
   const dispatch = useAppDispatch();
   const notes = useAppSelector((state) => state.notes.notes);
   const userInfo = useAppSelector((state) => state.user.userInfo);
+  const authInfo = useAppSelector((state) => state.auth);
   useEffect(() => {
     if (notes.length != userInfo.notesId.length) {
       dispatch(setLoader(true));
-      getAllNotesBackend()
+      getAllNotesBackend(authInfo.accessToken)
         .then((notesList) => {
           dispatch(setNotes(notesList));
           dispatch(setLoader(false));

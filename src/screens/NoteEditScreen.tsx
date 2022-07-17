@@ -37,6 +37,7 @@ import { clientBaseUrl } from "../apis/routes";
 function NoteEditScreen() {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const authInfo = useAppSelector((state) => state.auth);
   const { noteId } = useParams();
   const videoId = searchParams.get("videoId");
   const selectedNote = useAppSelector((state) => state.notes.selectedNote);
@@ -68,7 +69,8 @@ function NoteEditScreen() {
     if (!selectedNote.noteData.id) {
       dispatch(setLoader(true));
       getNoteById(
-        selectedNote?.noteData?.id ? selectedNote?.noteData?.id : noteId
+        selectedNote?.noteData?.id ? selectedNote?.noteData?.id : noteId,
+        authInfo.accessToken
       )
         .then((res: any) => {
           dispatch(setLoader(false));
@@ -132,7 +134,7 @@ function NoteEditScreen() {
         channelTitle: selectedNote.video?.snippet.channelTitle,
       },
     };
-    setNoteBackend(newData)
+    setNoteBackend(newData, authInfo.accessToken)
       .then((isSuccess: boolean) => {
         if (isSuccess) {
           dispatch(setSelectedNote({ ...data }));
@@ -188,7 +190,8 @@ function NoteEditScreen() {
     updateNoteStatus(
       selectedNote.noteData.id,
       newState,
-      selectedNote.noteData.authorId
+      selectedNote.noteData.authorId,
+      authInfo.accessToken
     )
       .then((res) => {
         if (res.ok) {
@@ -205,7 +208,6 @@ function NoteEditScreen() {
         dispatch(setLoader(false));
       })
       .catch((e) => {
-        console.log(e);
         dispatch(setLoader(false));
       });
   };
@@ -213,7 +215,7 @@ function NoteEditScreen() {
   const deleteNoteFromId = (noteId: string | undefined) => {
     dispatch(setLoader(true));
     if (noteId) {
-      deleteNoteById(noteId)
+      deleteNoteById(noteId, authInfo.accessToken)
         .then((res) => {
           dispatch(setLoader(false));
           if (res.ok) {
