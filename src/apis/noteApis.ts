@@ -1,4 +1,3 @@
-import { getIdTokenLocalStorage } from "../helpers/localStorageUtils";
 import { NoteData } from "../types/noteFetchingDataType";
 import { apiURL, baseURL } from "./routes";
 
@@ -15,8 +14,7 @@ export const noteRoutes = {
   putSingleStatus: apiURL + "/notes/note-state",
   deleteNote: (noteId: string) => apiURL + "/notes?id=" + noteId,
 };
-const getAllNotesBackend = async () => {
-  let idToken = getIdTokenLocalStorage();
+const getAllNotesBackend = async (idToken: string) => {
   if (idToken) {
     let data = await fetch(baseURL + noteRoutes.getAll, {
       headers: { Authorization: "Bearer " + idToken },
@@ -27,8 +25,10 @@ const getAllNotesBackend = async () => {
   }
   return null;
 };
-const getNoteById = async (noteId: string | null | undefined) => {
-  let idToken = getIdTokenLocalStorage();
+const getNoteById = async (
+  noteId: string | null | undefined,
+  idToken: string
+) => {
   if (idToken && noteId) {
     let authorizationToken = "Bearer " + idToken;
     return await fetch(baseURL + noteRoutes.getSingle(noteId), {
@@ -51,8 +51,7 @@ const getNoteById = async (noteId: string | null | undefined) => {
   return null;
 };
 
-const setNoteBackend = async (noteData: NoteData) => {
-  let idToken = getIdTokenLocalStorage();
+const setNoteBackend = async (noteData: NoteData, idToken: string) => {
   if (idToken) {
     let authorizationToken = "Bearer " + idToken;
     let res = await fetch(baseURL + noteRoutes.postPutSetSingle, {
@@ -70,12 +69,13 @@ const setNoteBackend = async (noteData: NoteData) => {
 const updateNoteStatus = async (
   noteId: string | null | undefined,
   newStatus: "public" | "private",
-  authorId: string
+  authorId: string,
+  idToken: string
 ) => {
   return await fetch(baseURL + noteRoutes.putSingleStatus, {
     method: "PUT",
     headers: {
-      Authorization: "Bearer " + getIdTokenLocalStorage(),
+      Authorization: "Bearer " + idToken,
       "Content-type": "application/json",
     },
     body: JSON.stringify({
@@ -91,11 +91,11 @@ const getPublicNoteById = async (noteId: string) => {
     .then((noteData) => noteData);
   return data;
 };
-const deleteNoteById = async (noteId: string) => {
+const deleteNoteById = async (noteId: string, idToken: string) => {
   return fetch(baseURL + noteRoutes.deleteNote(noteId), {
     method: "DELETE",
     headers: {
-      Authorization: "Bearer " + getIdTokenLocalStorage(),
+      Authorization: "Bearer " + idToken,
       "Content-type": "application/json",
     },
     body: "",

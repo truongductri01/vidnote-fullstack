@@ -5,23 +5,46 @@ import Loader from "./designComponents/Loader/Loader";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getIdTokenLocalStorage } from "./helpers/localStorageUtils";
 import { setUserInfo } from "./redux/reducers/user/userReducer";
 import { getUserInfoBackend, isValidIdToken } from "./apis/authApis";
 import { setLoader } from "./redux/reducers/loader/loaderReducer";
 import Toast from "./designComponents/Toast/Toast";
 import { logOutAndClearData } from "./helpers/logout";
 import { setToastError } from "./redux/reducers/toast/toastReducer";
+import app from "./firebase/config";
+import { getAuth } from "firebase/auth";
+import { clearAuth, setAuth } from "./redux/reducers/auth/authReducer";
+
+const auth = getAuth(app);
 
 function App() {
+  const [appHeight, setAppHeight] = useState<number>(window.innerHeight);
+  const [finishAuthLoading, setFinishAuthLoading] = useState<boolean>(false);
   const isLoading = useAppSelector((state) => state.loader.isLoading);
-  const idToken = getIdTokenLocalStorage();
   const userInfo = useAppSelector((state) => state.user.userInfo);
   const toastInfo = useAppSelector((state) => state.toast.toastInfo);
   const redirectInfo = useAppSelector((state) => state.redirect);
+  const authInfo = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [appHeight, setAppHeight] = useState(window.innerHeight);
+
+  const validateIdToken = async (idToken: string) => {
+    if (idToken) {
+      return isValidIdToken(idToken);
+    }
+    return false;
+  };
+  const logOut = () => {
+    logOutAndClearData(dispatch)
+      .then(() => {
+        navigate("/auth/login");
+        dispatch(setLoader(false));
+      })
+      .catch((e) => {
+        dispatch(setToastError("" + e));
+        dispatch(setLoader(false));
+      });
+  };
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -33,54 +56,65 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!idToken) {
-      navigate("/auth/login");
-    } else {
-      dispatch(setLoader(true));
-      isValidIdToken(idToken)
-        .then((isValid) => {
-          if (isValid) {
-            if (!userInfo.id) {
-              getUserInfoBackend()
-                .then((userInfo) => {
-                  if (redirectInfo.hasRedirect) {
-                    navigate(
-                      "/notes/" +
-                        userInfo.id +
-                        redirectInfo.property.videoId +
-                        "?videoId=" +
-                        redirectInfo.property.videoId
-                    );
-                  }
-                  dispatch(setUserInfo(userInfo));
-                  dispatch(setLoader(false));
-                })
-                .catch((e) => {
-                  dispatch(setToastError("" + e));
-                  dispatch(setLoader(false));
-                });
-            } else {
-              dispatch(setLoader(false));
-            }
-          } else {
-            logOutAndClearData(dispatch)
-              .then(() => {
-                navigate("/auth/login");
-                dispatch(setLoader(false));
-              })
-              .catch((e) => {
-                dispatch(setToastError("" + e));
-                dispatch(setLoader(false));
-              });
-          }
-        })
-        .catch((e) => {
-          dispatch(setLoader(false));
-          dispatch(setToastError("" + e));
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        await user.getIdToken().then((token) => {
+          dispatch(
+            setAuth({
+              accessToken: token,
+              isSignIn: true,
+              uid: user.uid,
+            })
+          );
         });
+      } else {
+        dispatch(clearAuth());
+      }
+      setFinishAuthLoading(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (finishAuthLoading) {
+      dispatch(setLoader(true));
+      if (authInfo.isSignIn) {
+        validateIdToken(authInfo.accessToken)
+          .then((isValid) => {
+            if (isValid) {
+              if (!userInfo.id) {
+                getUserInfoBackend(authInfo.accessToken)
+                  .then((userInfo) => {
+                    if (redirectInfo.hasRedirect) {
+                      navigate(
+                        "/notes/" +
+                          userInfo.id +
+                          redirectInfo.property.videoId +
+                          "?videoId=" +
+                          redirectInfo.property.videoId
+                      );
+                    }
+                    dispatch(setUserInfo(userInfo));
+                    dispatch(setLoader(false));
+                  })
+                  .catch((e) => {
+                    dispatch(setToastError("" + e));
+                    dispatch(setLoader(false));
+                  });
+              }
+            } else {
+              logOut();
+            }
+          })
+          .catch((e) => {
+            dispatch(setLoader(false));
+            dispatch(setToastError("" + e));
+          });
+      } else {
+        logOut();
+      }
+      dispatch(setLoader(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idToken]);
+  }, [authInfo.isSignIn, authInfo.accessToken, finishAuthLoading]);
 
   return (
     <div
