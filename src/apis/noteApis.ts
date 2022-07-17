@@ -1,5 +1,7 @@
+import { config } from "../config/config";
 import { NoteData } from "../types/noteFetchingDataType";
-import { apiURL, baseURL } from "./routes";
+
+const { baseURL, apiURL } = config.app;
 
 export const noteRoutes = {
   getAll: apiURL + "/notes/all",

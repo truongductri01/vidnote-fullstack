@@ -1,4 +1,5 @@
-import { apiURL, baseURL } from "./routes";
+import { config } from "../config/config";
+const { baseURL, apiURL } = config.app;
 
 const youtube = {
   search: (q: string, maxResults: number) => {

@@ -1,5 +1,6 @@
+import { config } from "../config/config";
 import { NewUserSignUp } from "../types/userTypes";
-import { baseURL, apiURL } from "./routes";
+const { baseURL, apiURL } = config.app;
 const authBaseRoute = "/auth";
 const authRoutes = {
   verifyToken: authBaseRoute + "/verify-token",
