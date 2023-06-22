@@ -27,7 +27,7 @@ function NotesContainer() {
     }
   }, [userInfo]);
   return (
-    <div className="NotesContainer w-full h-full flex-grow flex-shrink-0 p-2 overflow-auto">
+    <div className="NotesContainer w-full h-full flex-grow flex-shrink-0 p-2 overflow-auto flex flex-wrap">
       {notes.map((noteData: NoteData) => (
         <NoteCard noteData={noteData} key={noteData.id} />
       ))}

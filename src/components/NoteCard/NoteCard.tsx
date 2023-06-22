@@ -11,7 +11,7 @@ function NoteCard({ noteData }: { noteData: NoteData }) {
   const dispatch = useAppDispatch();
   return (
     <div
-      className="NoteCard w-full h-max border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-4 hover:bg-yellow-100 shadow-md shadow-gray-500 p-2 box-border flex flex-col sm:flex-row last:mb-0"
+      className="NoteCard w-[300px] h-[300px] border-2 border-yellow-500 bg-gray-100 rounded-md cursor-pointer mb-4 hover:bg-yellow-100 shadow-md shadow-gray-500 p-2 box-border last:mb-0 mx-4 my-4"
       key={noteData.id}
       onClick={() => {
         if (
@@ -30,7 +30,7 @@ function NoteCard({ noteData }: { noteData: NoteData }) {
       }}
     >
       <img
-        className="rounded-md flex-shrink-0 max-w-[320px]"
+        className="rounded-md flex-shrink-0 w-full h-auto mb-3"
         src={noteData.video.url as any}
         alt=""
       />
