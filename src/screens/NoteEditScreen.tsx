@@ -33,6 +33,7 @@ import {
 } from "../styles/buttonStyles";
 import Modal from "../components/Modal/Modal";
 import { config } from "../config/config";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 
 function NoteEditScreen() {
   const [searchParams] = useSearchParams();
@@ -52,6 +53,7 @@ function NoteEditScreen() {
   const [shareNote, setShareNote] = useState(false);
   const [noteInNotes, setNoteInNotes] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const isOnline = useOnlineStatus();
   const publicViewLink = `${config.app.clientBaseURL}/view/${noteId}?videoId=${videoId}`;
   const navigate = useNavigate();
 
@@ -318,8 +320,9 @@ function NoteEditScreen() {
           <button
             className={primaryButtonStyleClassName.small + " w-[100px]"}
             onClick={onSaveButtonClick}
+            disabled={!isOnline}
           >
-            Save
+            {isOnline ? "Save" : "Reconnecting..."}
           </button>
         </div>
         <DraftEditor
