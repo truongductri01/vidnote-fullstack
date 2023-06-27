@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./reducers/auth/authReducer";
 import loaderReducer from "./reducers/loader/loaderReducer";
 import notesReducer from "./reducers/notes/notesReducer";
@@ -11,16 +11,20 @@ import { persistReducer, persistStore } from "redux-persist";
 const persistConfig = {
     key: "root",
     storage,
+    whitelist: ["notes", "user", "auth", "redirect"],
 };
 const store = configureStore({
-    reducer: {
-        loader: loaderReducer,
-        notes: persistReducer(persistConfig, notesReducer),
-        user: persistReducer(persistConfig, userReducer),
-        toast: toastReducer,
-        redirect: persistReducer(persistConfig, redirectReducer),
-        auth: persistReducer(persistConfig, authReducer),
-    },
+    reducer: persistReducer(
+        persistConfig,
+        combineReducers({
+            loader: loaderReducer,
+            notes: notesReducer,
+            user: userReducer,
+            toast: toastReducer,
+            redirect: redirectReducer,
+            auth: authReducer,
+        })
+    ),
     devTools: process.env.NODE_ENV !== "production",
 });
 
