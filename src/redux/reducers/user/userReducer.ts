@@ -9,6 +9,7 @@ let initialState: { userInfo: UserInfo } = {
     searchable: true,
     avatarUrl: "",
     notesId: [],
+    username: ""
   },
 };
 
