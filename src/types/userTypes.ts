@@ -5,6 +5,7 @@ export type UserInfo = {
   searchable: boolean;
   avatarUrl: string;
   notesId: string[];
+  username: string;
 };
 
 export type NewUserSignUp = {

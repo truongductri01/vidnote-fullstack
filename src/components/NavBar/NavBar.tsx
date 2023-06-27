@@ -27,6 +27,12 @@ function NavBar() {
       <Link to={"/notes"} className={linkClass}>
         <p>Notes</p>
       </Link>
+      <Link to={"/my-profile"} className={linkClass}>
+        <p>My Profile</p>
+      </Link>
+      {/* <Link to={"/search-user"} className={linkClass}>
+        <p>Search Users</p>
+      </Link> */}
       {idToken ? (
         <button
           className={secondaryButtonStyleClassName.small + " ml-auto"}
