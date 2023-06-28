@@ -41,7 +41,7 @@ function VideoSearch(props: any) {
           className={primaryInputStyleClassName}
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          placeholder="Search..."
+          placeholder="Search for your video..."
         />
         <button
           className={primaryButtonStyleClassName.default + " ml-2"}
