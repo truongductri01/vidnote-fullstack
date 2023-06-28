@@ -18,45 +18,64 @@ import ViewNoteScreen from "./screens/ViewNoteScreen";
 import MyProfileScreen from "./screens/MyProfileScreen";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "./redux/store";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import TestScreen from "./screens/TestScreen";
+
+const client = new ApolloClient({
+    uri: "http://localhost:8080/graphql",
+    cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/auth" element={<AuthScreen />}>
-                            <Route path="login" element={<LogIn />}></Route>
-                            <Route path="signup" element={<SignUp />}></Route>
-                        </Route>
-                        <Route path="checklist" element={<CheckList />}></Route>
-                        <Route
-                            path="/redirect"
-                            element={<RedirectScreen />}
-                        ></Route>
-                        <Route
-                            path="view/:noteId"
-                            element={<ViewNoteScreen />}
-                        ></Route>
-                        <Route path="/" element={<App />}>
-                            <Route index element={<SearchScreen />}></Route>
-                            <Route
-                                path="my-profile"
-                                element={<MyProfileScreen />}
-                            ></Route>
-                            <Route path="notes" element={<NotesScreen />}>
-                                <Route index element={<NotesContainer />} />
+        <ApolloProvider client={client}>
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/auth" element={<AuthScreen />}>
+                                <Route path="login" element={<LogIn />}></Route>
                                 <Route
-                                    path=":noteId"
-                                    element={<NoteEditScreen />}
-                                />
+                                    path="signup"
+                                    element={<SignUp />}
+                                ></Route>
                             </Route>
-                        </Route>
-                        {/* <Route path="/gallery" element={<GalleryScreen />}></Route> */}
-                    </Routes>
-                </BrowserRouter>
-            </PersistGate>
-        </Provider>
+                            <Route
+                                path="/test"
+                                element={<TestScreen />}
+                            ></Route>
+                            <Route
+                                path="checklist"
+                                element={<CheckList />}
+                            ></Route>
+                            <Route
+                                path="/redirect"
+                                element={<RedirectScreen />}
+                            ></Route>
+                            <Route
+                                path="view/:noteId"
+                                element={<ViewNoteScreen />}
+                            ></Route>
+                            <Route path="/" element={<App />}>
+                                <Route index element={<SearchScreen />}></Route>
+                                <Route
+                                    path="my-profile"
+                                    element={<MyProfileScreen />}
+                                ></Route>
+                                <Route path="notes" element={<NotesScreen />}>
+                                    <Route index element={<NotesContainer />} />
+                                    <Route
+                                        path=":noteId"
+                                        element={<NoteEditScreen />}
+                                    />
+                                </Route>
+                            </Route>
+                            {/* <Route path="/gallery" element={<GalleryScreen />}></Route> */}
+                        </Routes>
+                    </BrowserRouter>
+                </PersistGate>
+            </Provider>
+        </ApolloProvider>
     </React.StrictMode>,
     document.getElementById("root")
 );
