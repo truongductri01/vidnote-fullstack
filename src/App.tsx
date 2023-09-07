@@ -18,120 +18,122 @@ import { clearAuth, setAuth } from "./redux/reducers/auth/authReducer";
 const auth = getAuth(app);
 
 function App() {
-  const [appHeight, setAppHeight] = useState<number>(window.innerHeight);
-  const [finishAuthLoading, setFinishAuthLoading] = useState<boolean>(false);
-  const isLoading = useAppSelector((state) => state.loader.isLoading);
-  const userInfo = useAppSelector((state) => state.user.userInfo);
-  const toastInfo = useAppSelector((state) => state.toast.toastInfo);
-  const redirectInfo = useAppSelector((state) => state.redirect);
-  const authInfo = useAppSelector((state) => state.auth);
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+    const [appHeight, setAppHeight] = useState<number>(window.innerHeight);
+    const [finishAuthLoading, setFinishAuthLoading] = useState<boolean>(false);
+    const isLoading = useAppSelector((state) => state.loader.isLoading);
+    const userInfo = useAppSelector((state) => state.user.userInfo);
+    const toastInfo = useAppSelector((state) => state.toast.toastInfo);
+    const redirectInfo = useAppSelector((state) => state.redirect);
+    const authInfo = useAppSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
-  const validateIdToken = async (idToken: string) => {
-    if (idToken) {
-      return isValidIdToken(idToken);
-    }
-    return false;
-  };
-  const logOut = () => {
-    logOutAndClearData(dispatch)
-      .then(() => {
-        navigate("/auth/login");
-        dispatch(setLoader(false));
-      })
-      .catch((e) => {
-        dispatch(setToastError("" + e));
-        dispatch(setLoader(false));
-      });
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      setAppHeight(window.innerHeight);
-    });
-    window.addEventListener("orientationchange", () => {
-      setAppHeight(window.innerHeight);
-    });
-  }, []);
-
-  useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        await user.getIdToken().then((token) => {
-          dispatch(
-            setAuth({
-              accessToken: token,
-              isSignIn: true,
-              uid: user.uid,
+    const validateIdToken = async (idToken: string) => {
+        if (idToken) {
+            return isValidIdToken(idToken);
+        }
+        return false;
+    };
+    const logOut = () => {
+        logOutAndClearData(dispatch)
+            .then(() => {
+                navigate("/auth/login");
+                dispatch(setLoader(false));
             })
-          );
+            .catch((e) => {
+                dispatch(setToastError("" + e));
+                dispatch(setLoader(false));
+            });
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", () => {
+            setAppHeight(window.innerHeight);
         });
-      } else {
-        dispatch(clearAuth());
-      }
-      setFinishAuthLoading(true);
-    });
-  }, []);
+        window.addEventListener("orientationchange", () => {
+            setAppHeight(window.innerHeight);
+        });
+    }, []);
 
-  useEffect(() => {
-    if (finishAuthLoading) {
-      dispatch(setLoader(true));
-      if (authInfo.isSignIn) {
-        validateIdToken(authInfo.accessToken)
-          .then((isValid) => {
-            if (isValid) {
-              if (!userInfo.id) {
-                getUserInfoBackend(authInfo.accessToken)
-                  .then((userInfo) => {
-                    if (redirectInfo.hasRedirect) {
-                      navigate(
-                        "/notes/" +
-                          userInfo.id +
-                          redirectInfo.property.videoId +
-                          "?videoId=" +
-                          redirectInfo.property.videoId
-                      );
-                    }
-                    dispatch(setUserInfo(userInfo));
-                    dispatch(setLoader(false));
-                  })
-                  .catch((e) => {
-                    dispatch(setToastError("" + e));
-                    dispatch(setLoader(false));
-                  });
-              }
+    useEffect(() => {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                await user.getIdToken().then((token) => {
+                    dispatch(
+                        setAuth({
+                            accessToken: token,
+                            isSignIn: true,
+                            uid: user.uid,
+                        })
+                    );
+                });
             } else {
-              logOut();
+                dispatch(clearAuth());
             }
-          })
-          .catch((e) => {
-            dispatch(setLoader(false));
-            dispatch(setToastError("" + e));
-          });
-      } else {
-        logOut();
-      }
-      dispatch(setLoader(false));
-    }
-  }, [authInfo.isSignIn, authInfo.accessToken, finishAuthLoading]);
+            setFinishAuthLoading(true);
+        });
+    }, []);
 
-  return (
-    <div
-      id="vidnote-app"
-      className="App relative w-screen max-w-full flex flex-col items-center justify-between box-border overflow-y-auto"
-      style={{
-        height: `${appHeight}px`,
-      }}
-    >
-      {isLoading && <Loader />}
-      {toastInfo.hasToast && (
-        <Toast type={toastInfo.type} message={toastInfo.message} />
-      )}
-      <NavBar />
-      <Outlet />
-    </div>
-  );
+    useEffect(() => {
+        if (finishAuthLoading) {
+            dispatch(setLoader(true));
+            if (authInfo.isSignIn) {
+                validateIdToken(authInfo.accessToken)
+                    .then((isValid) => {
+                        if (isValid) {
+                            if (!userInfo.id) {
+                                getUserInfoBackend(authInfo.accessToken)
+                                    .then((userInfo) => {
+                                        if (redirectInfo.hasRedirect) {
+                                            navigate(
+                                                "/notes/" +
+                                                    userInfo.id +
+                                                    redirectInfo.property
+                                                        .videoId +
+                                                    "?videoId=" +
+                                                    redirectInfo.property
+                                                        .videoId
+                                            );
+                                        }
+                                        dispatch(setUserInfo(userInfo));
+                                        dispatch(setLoader(false));
+                                    })
+                                    .catch((e) => {
+                                        dispatch(setToastError("" + e));
+                                        dispatch(setLoader(false));
+                                    });
+                            }
+                        } else {
+                            logOut();
+                        }
+                    })
+                    .catch((e) => {
+                        dispatch(setLoader(false));
+                        dispatch(setToastError("" + e));
+                    });
+            } else {
+                logOut();
+            }
+            dispatch(setLoader(false));
+        }
+    }, [authInfo.isSignIn, authInfo.accessToken, finishAuthLoading]);
+
+    return (
+        <div
+            id="vidnote-app"
+            className="App relative w-screen max-w-full flex flex-col items-center justify-between box-border bg-slate-50"
+            style={{
+                height: `${appHeight}px`,
+            }}
+        >
+            {isLoading && <Loader />}
+            {toastInfo.hasToast && (
+                <Toast type={toastInfo.type} message={toastInfo.message} />
+            )}
+            <NavBar />
+            <Outlet />
+        </div>
+    );
 }
 
 export default App;

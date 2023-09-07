@@ -61,6 +61,7 @@ function NoteEditScreen() {
     const isOnline = useOnlineStatus();
     const publicViewLink = `${config.app.clientBaseURL}/view/${noteId}?videoId=${videoId}`;
     const navigate = useNavigate();
+    const [openOptionMenu, setOpenOptionMenu] = useState<boolean>(false);
 
     useEffect(() => {
         if (notes.some((note) => note.id === noteId)) {
@@ -314,7 +315,8 @@ function NoteEditScreen() {
                         <h1>Are you sure to delete this Note?</h1>
                         <button
                             className={
-                                primaryButtonStyleClassName.default + " mt-5"
+                                primaryButtonStyleClassName.default +
+                                " mt-5 bg-primary hover:bg-primary"
                             }
                             onClick={() => deleteNoteFromId(noteId)}
                         >
@@ -327,31 +329,56 @@ function NoteEditScreen() {
             <div className="flex-grow w-full flex flex-col overflow-y-auto lg:h-full">
                 <div className="Buttons flex mb-2 justify-between sm:justify-end">
                     {noteId && noteInNotes && (
-                        <>
+                        <div className="relative sm:mr-5">
                             <button
-                                className={
-                                    secondaryButtonStyleClassName.small +
-                                    " w-[140px] text-sm sm:mr-5"
-                                }
-                                onClick={onShareButtonClick}
+                                className="flex items-center justify-between w-max px-3 py-1 border-2 border-black rounded-lg box-border h-[32px]"
+                                onClick={() => setOpenOptionMenu(true)}
                             >
-                                Share this Note
+                                <p className=" text-sm mr-5">Options</p>
+                                <i className="fa fa-angle-down fa-lg"></i>
                             </button>
-                            <button
-                                className={
-                                    primaryButtonStyleClassName.small +
-                                    " w-[100px]"
-                                }
-                                onClick={() => setOpenDeleteModal(true)}
-                            >
-                                Delete
-                            </button>
-                        </>
+                            {openOptionMenu && (
+                                <>
+                                    <div
+                                        className=" w-screen h-screen fixed top-0 left-0 backdrop-blur-[1px] cursor-pointer"
+                                        onClick={() => setOpenOptionMenu(false)}
+                                    ></div>
+                                    <div className="Dropdown absolute z-10 top-[40px] p-5 left-0 bg-slate-200 shadow-md  ">
+                                        <button
+                                            className={
+                                                secondaryButtonStyleClassName.small +
+                                                " w-[160px] text-sm mb-5 sm:mr-5"
+                                            }
+                                            onClick={() => {
+                                                onShareButtonClick();
+                                                setOpenOptionMenu(false);
+                                            }}
+                                        >
+                                            Share this Note
+                                        </button>
+                                        <button
+                                            className={
+                                                primaryButtonStyleClassName.small +
+                                                " w-[160px] bg-primary hover:bg-primary"
+                                            }
+                                            onClick={() => {
+                                                setOpenDeleteModal(true);
+                                                setOpenOptionMenu(false);
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        // <>
+                        // </>
                     )}
 
                     <button
                         className={
-                            primaryButtonStyleClassName.small + " w-[100px]"
+                            " px-8 bg-secondary rounded-lg flex items-center h-[32px]"
                         }
                         onClick={onSaveButtonClick}
                         disabled={!isOnline}
@@ -362,7 +389,7 @@ function NoteEditScreen() {
 
                 <div className="h-full flex flex-col">
                     {/* summary and note tab */}
-                    <Tab
+                    {/* <Tab
                         tabs={[
                             { id: "summary", label: "Summary" },
                             { id: "note", label: "Note" },
@@ -371,7 +398,7 @@ function NoteEditScreen() {
                         onClick={(id: "summary" | "note") => {
                             setTabId(id);
                         }}
-                    />
+                    /> */}
                     <DraftEditor
                         editorState={editorState}
                         setEditorState={setEditorState}

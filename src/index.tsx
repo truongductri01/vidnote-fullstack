@@ -11,7 +11,7 @@ import NotesScreen from "./screens/NotesScreen";
 import AuthScreen from "./screens/AuthScreen";
 import LogIn from "./components/Login/LogIn";
 import SignUp from "./components/SignUp/SignUp";
-import NotesContainer from "./components/NotesContainer/NotesContainer";
+import NotesContainer from "./screens/NotesContainer";
 import CheckList from "./screens/CheckList";
 import RedirectScreen from "./screens/RedirectScreen";
 import ViewNoteScreen from "./screens/ViewNoteScreen";
@@ -57,18 +57,18 @@ ReactDOM.render(
                                 element={<ViewNoteScreen />}
                             ></Route>
                             <Route path="/" element={<App />}>
-                                <Route index element={<SearchScreen />}></Route>
-                                <Route
-                                    path="my-profile"
-                                    element={<MyProfileScreen />}
-                                ></Route>
+                                <Route index element={<NotesContainer />} />
+                                {/* <Route index element={<SearchScreen />}></Route> */}
                                 <Route path="notes" element={<NotesScreen />}>
-                                    <Route index element={<NotesContainer />} />
                                     <Route
                                         path=":noteId"
                                         element={<NoteEditScreen />}
                                     />
                                 </Route>
+                                <Route
+                                    path="my-profile"
+                                    element={<MyProfileScreen />}
+                                ></Route>
                             </Route>
                             {/* <Route path="/gallery" element={<GalleryScreen />}></Route> */}
                         </Routes>

@@ -109,7 +109,7 @@ function SignUp() {
           }}
           className={
             primaryButtonStyleClassName.default +
-            " disabled:cursor-default disabled:bg-gray-400"
+            " disabled:cursor-default disabled:bg-gray-400 bg-primary"
           }
         >
           Register
